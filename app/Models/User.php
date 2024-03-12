@@ -17,11 +17,33 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $table ="users";
     protected $fillable = [
-        'name',
+        'username',
+        'firstname',
+        'lastname',
+        'college',
+        'department',
         'email',
+        'contact',
         'password',
+       'contact_no',
+        'role',
+        'cust_code',
     ];
+// define the relationship of admin to users
+public function admin(){
+    return $this->hasOne(admin::class,'users_id')->withDefault();
+}
+// define the relationship of customer to users
+public function customer(){
+    return $this->hasOne(customer::class,'users_id')->withDefault();
+}
+
+// define the relationship of staff to users
+public function staff(){
+    return $this->hasOne(staff::class, 'users_id')->withDefault();
+}
 
     /**
      * The attributes that should be hidden for serialization.
