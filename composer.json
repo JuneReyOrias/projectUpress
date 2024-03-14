@@ -6,7 +6,6 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "barryvdh/laravel-dompdf": "^2.1",
         "guzzlehttp/guzzle": "^7.2",
         "haruncpi/laravel-id-generator": "^1.1",
         "laravel/breeze": "^1.29",
@@ -35,11 +34,7 @@
             "Tests\\": "tests/"
         }
     },
-    "autoload": {
-        "psr-4": {
-            "Barryvdh\\DomPDF\\": "vendor/barryvdh/laravel-dompdf/src/"
-        }
-    },
+
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
