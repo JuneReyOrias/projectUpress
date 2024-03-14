@@ -129,36 +129,60 @@
             <div class="col-md-12">
                 <article class="card">
                     <div class="card-body">
-                        <h6>Order ID: OD45345345435</h6>
+                        <h6>Order ID:                                    @foreach($groupedOrderIds as $groupedPart => $lastTwoDigits)
+                            {{ $groupedPart . '-' . implode(', ', $lastTwoDigits) }} <br>
+                        @endforeach</h6>
                         <article class="card">
                             <div class="card-body row">
-                                <div class="col-sm-6"> <strong>Estimated Delivery time:</strong> <br>29 Nov 2019 </div>
-                                <div class="col-sm-6"> <strong>Shipping BY:</strong> <br> BLUEDART, | <i class="fa fa-phone"></i> +1598675986 </div>
-                                <div class="col-sm-6"> <strong>Status:</strong> <br> Picked by the courier </div>
-                                <div class="col-sm-6"> <strong>Tracking #:</strong> <br> BD045903594059 </div>
+                                <div class="col"> <strong>CustomerID:</strong> <br> {{ $customerId }} </div>
+                                <div class="col"> <strong>OrderID:</strong> <br> 
+                                    @foreach($groupedOrderIds as $groupedPart => $lastTwoDigits)
+                                        {{ $groupedPart . '-' . implode(', ', $lastTwoDigits) }} <br>
+                                    @endforeach
+                                </div>
+                                <div class="col"> <strong>College:</strong> <br> {{ $collegeType }} </div>
+                                <div class="col"> <strong>Department:</strong> <br> {{ $department }} </div>
                             </div>
                         </article>
                         <div class="track row">
-                            <div class="step active col-sm-6 col-md-3"> 
+                            @if($cancelledOrders > 0)
+                            <div class="step {{ $cancelledOrders > 0 ? 'active' : '' }} col-sm-6 col-md-3"> 
+                                <span class="icon"> <i class="fa fa-times"></i> </span> 
+                                <span class="text">Cancelled orders</span> 
+                            </div>
+                        @else
+                            <div class="step {{ $confirmOrders > 0 ? 'active' : '' }} col-sm-6 col-md-3"> 
                                 <span class="icon"> <i class="fa fa-check"></i> </span> 
-                                <span class="text">Order confirmed</span> 
+                                <span class="text">Confirmed</span> 
                             </div>
-                            <div class="step active col-sm-6 col-md-3"> 
+                        @endif
+                        
+                        
+                            <div class="step {{ $paymentOrders> 0 ? 'active' : '' }} col-sm-6 col-md-3"> 
                                 <span class="icon"> <i class="fa fa-user"></i> </span> 
-                                <span class="text"> Picked by courier</span> 
+                                <span class="text">Payment</span> 
                             </div>
-                            <div class="step col-sm-6 col-md-3"> 
+                            <div class="step {{ $processingOrders> 0 ? 'active' : '' }} col-sm-6 col-md-3"> 
                                 <span class="icon"> <i class="fa fa-truck"></i> </span> 
-                                <span class="text"> On the way </span> 
+                                <span class="text">Processing</span> 
                             </div>
-                            <div class="step col-sm-6 col-md-3"> 
+                            @if($readyForPickupOrders> 0)
+                            <div class="step {{ $readyForPickupOrders > 0 ? 'active' : '' }} col-sm-6 col-md-3"> 
                                 <span class="icon"><i class="fa fa-truck"></i></span> 
                                 <span class="text">Ready for pickup</span> 
                             </div>
+                            @else
+                            <div class="step {{ $completedOrders > 0 ? 'active' : '' }} col-sm-6 col-md-3"> 
+                                <span class="icon"> <i class="fa fa-check"></i> </span> 
+                                <span class="text">Completed</span> 
+                            </div>
+                            @endif
+                        
                         </div>
+                      
                         
                         <hr>
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-md-4">
                                 <figure class="itemside mb-3">
                                     <div class="aside"><img src="https://i.imgur.com/iDwDQ4o.png" class="img-sm border"></div>
@@ -183,7 +207,7 @@
                                     </figcaption>
                                 </figure>
                             </div>
-                        </div>
+                        </div> --}}
                         <hr>
                         <a href="#" class="btn btn-warning" data-abc="true"> <i class="fa fa-chevron-left"></i> Back to orders</a>
                     </div>

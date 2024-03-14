@@ -125,17 +125,17 @@
                                     <a href="{{route('customer.addcart.cart_order')}}" title="Back">
                                         <button class="btn btn-primary btn-sm d-flex"><i class="far fa-arrow-alt-circle-left" aria-hidden="true"></i></button>
                                     </a>
-                                    <h5 class="text-muted">Checkout <span></span>!</h5>
+                                    <h5 class="text-muted">Confirm Orders<span></span></h5>
                                 </div>
                                 <div class="card-body p-4">
                                     
                                   <div class="d-flex justify-content-between align-items-center mb-4">
                                     <p class="lead fw-normal mb-0" style="color: #b51717;">Product</p>
-                                    <p class="small text-muted mb-0">Receipt Voucher : 1KAU9-84UIL</p>
+                                    {{-- <p class="small text-muted mb-0">Receipt Voucher : 1KAU9-84UIL</p> --}}
                                   </div>
                                   <div class="card shadow-0 border mb-4">
                                     <div class="card-body">
-                                        @foreach ($cart as $cartItems )
+                                        @foreach ($cart->where('type','product') as $cartItems )
                                         <div class="row">
                                             <div class="col-md-2">
                                               <img src="/productimages/{{ $cartItems->image}}"
@@ -170,14 +170,15 @@
                                   </div>
                                   <div class="card shadow-0 border mb-4">
                                     <div class="card-body">
-                                        @foreach ($cart as $cartItems )
+                                        @foreach ($cart->where('type','services') as $cartItems )
                                         <div class="row">
                                             <div class="col-md-2">
-                                              <img src="/productimages/{{ $cartItems->image}}"
+                                              <img src="/servicesimages/{{ $cartItems->image}}"
                                                 class="img-fluid" alt="Phone">
                                             </div>
+                                            
                                             <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                              <p class="text-muted mb-0">{{$cartItems->item_name }}</p>
+                                              <p class="text-muted mb-0">{{$cartItems->type_services}}</p>
                                             </div>
                                             <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                                               <p class="text-muted mb-0 small">Color: {{$cartItems->color}}</p>
@@ -203,8 +204,8 @@
 
                                 <div class="card-footer border-0 px-4 py-5"
                                   style="background-color: #D7DBDD; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-                                  <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
-                                    : <span class="h2 mb-0 ms-2">{{$total}}</span></h5>
+                                  <h4 class="d-flex align-items-center justify-content-end text-white text ">Total
+                                    : <span class="">Php {{number_format($total,2)}}</span></h4>
                                 </div>
                                 <div class="row mt-4 d-flex justify-content-center">
                                     <div class="col-sm-6 order-md-2 text-center">
@@ -213,7 +214,7 @@
                                             <!-- You can include hidden input fields here to pass additional data if needed -->
                                             <!-- For example: -->
                                             <!-- <input type="hidden" id="additionalData" name="additionalData" value="someValue"> -->
-                                            <button type="button" class="btn btn-primary mb-4 btn-lg pl-5 pr-5" onclick="prepareCheckout()">Checkout</button>
+                                            <button type="button" class="btn btn-primary mb-4 btn-lg pl-5 pr-5" onclick="prepareCheckout()">Confirm</button>
                                         </form>
                                     </div>
                                 </div>

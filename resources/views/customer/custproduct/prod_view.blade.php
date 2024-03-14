@@ -192,14 +192,16 @@
                                     <a href="#">
                                         <h4 class="">{{$order->product_name}}</h4>
                                     </a>
-                                    <div class="" style="gap:5px;"><h6>Php {{$order->unit_price}}</h6></div>
+                                    <input type="hidden" class="service-id" id="service_id" value="{{ $order->id }}">
+                                    <div class="" style="gap:5px;"><h6>Php {{number_format($order->unit_price,2)}}</h6></div>
                                     
                                     <h4>Description:<p>{{$order->descritpion}}</p></h4>
                                     <p>Stocks: {{$order->stocks}}</p>
                                     <p>Status: {{$order->status}}</p>
                                     
                                     <!-- Add Cart button with onclick event -->
-                                    <button class="btn btn-primary" onclick="openModal('{{$order->product_name}}', '{{$order->unit_price}}', '{{$order->image}}')">Add Cart</button>
+                                    <button class="btn add-to-cart" data-service-id="{{ $order->id }}" data-service-type="product" data-service-image="{{$order->image}}" onclick="openModal('{{$order->product_name}}', '{{$order->unit_price}}', '{{$order->image}}', '{{$order->id}}')">Add Cart</button>
+
                                 </div>
                             </div>
                         </div>
@@ -249,18 +251,18 @@
                                         <input type="text" id="totalPrice" name="total_amount" class="form-control" readonly>
                                     </div>
                                 </div>
-                                
+                            
                                 <!-- Other Color Input -->
                                 <div class="form-group" id="otherColorInputContainer" style="display: none;">
                                     <label for="otherColorInput">Enter Color:</label>
-                                    <input type="text" id="otherColorInput" name="othercolor"class="form-control" placeholder="Enter Color">
+                                    <input type="text" id="otherColorInput" name="other_color"class="form-control" placeholder="Enter Color">
                                 </div>
-                                
+                                <input type="hidden" id="serviceIdInput" name="product_id" class="form-control" id="orderId">
                                 <!-- Hidden input fields for product name, price, and user ID -->
                                 <input type="hidden" id="productNameInput" name="item_name" value="{{$order->product_name}}">
-                                <input type="hidden" id="productPriceInput" name="unit_price">
-                                <input type="hidden" id="unitPriceInput" name="unit_price" value="{{$order->unit_price}}">
-                                <input type="hidden" name="product_id" value="{{$order->id}}">
+                                {{-- <input type="hidden" id="productPriceInput" name="unit_price"> --}}
+                                <input type="hidden" id="productPriceInput" name="unit_price" id="productPrice">
+                                {{-- <input type="hidden" id="serviceIdInput" name="product_id" id="orderId"> --}}
                                 <input type="hidden" name="users_id" value="{{$order->users_id}}">
                                 <input type="hidden" id="userIdInput" name="image" value="{{$order->image}}">
                                 
@@ -272,15 +274,17 @@
                     </div>
                     </div>
                     <script>
-                    function openModal(productName, productPrice, userId) {
-                        document.getElementById("productName").textContent = productName;
-                        document.getElementById("productNameInput").value = productName;
-                        document.getElementById("productPriceInput").value = productPrice;
-                        document.getElementById("unitPriceInput").value = productPrice;
-                        document.getElementById("userIdInput").value = userId;
-                        document.getElementById("cartModal").style.display = "block";
-                        calculateTotal(); // Calculate total price initially
-                    }
+                        // Inside the openModal function
+                        function openModal(productName, productPrice, userId, orderId) {
+                            document.getElementById("productName").textContent = productName;
+                            document.getElementById("productNameInput").value = productName;
+                            document.getElementById("productPriceInput").value = productPrice;
+                            document.getElementById("userIdInput").value = userId;
+                            document.getElementById("serviceIdInput").value = orderId; // Set the value of serviceIdInput
+                            document.getElementById("cartModal").style.display = "block";
+                            calculateTotal(); // Calculate total price initially
+                        }
+
 
                     function closeModal() {
                         document.getElementById("cartModal").style.display = "none";
@@ -304,7 +308,7 @@
     var quantity = parseInt(document.getElementById("quantityInput").value);
 
     // Get the unit price from the hidden input field or any other source
-    var unitPrice = parseFloat(document.getElementById("unitPriceInput").value);
+    var unitPrice = parseFloat(document.getElementById("productPriceInput").value);
 
     // Calculate the total price by multiplying quantity and unit price
     var totalPrice = quantity * unitPrice;
@@ -364,4 +368,27 @@
     $(document).ready(function() {
         fetchNotifications();
     });
+</script>
+<script>
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', function() {
+            const orderId = this.getAttribute('data-service-id');
+            const typeServices = this.getAttribute('data-service-type');
+            const typeImage = this.getAttribute('data-service-image');
+            document.getElementById('serviceIdInput').value = orderId;
+            document.getElementById('typeServicesInput').value = typeServices;
+            document.getElementById('typeImagesInput').value = typeImage;
+            document.getElementById('serviceId').textContent = serviceId;
+        });
+    });
+
+    function addToCart() {
+        const orderId = document.getElementById('serviceIdInput').value;
+        const typeServices = document.getElementById('typeServicesInput').value;
+        const typeImage = document.getElementById('typeImagesInput').value;
+        console.log('Service ID:', orderId);
+        console.log('Type Services:', typeServices);
+        console.log('Type Image:', typeImage );
+        // Add logic to add the service to the cart
+    }
 </script>

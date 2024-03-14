@@ -22,6 +22,7 @@ class OrderListing extends Model
     'unit_price',
     'discount',
     'total',
+    'order_status',
   ];
 
 //  relationship of purchase order to order listing

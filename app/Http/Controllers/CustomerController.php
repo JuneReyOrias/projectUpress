@@ -9,16 +9,23 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+
+
+use Barryvdh\DomPDF\PDF; 
 use Illuminate\Support\Str;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class CustomerController extends Controller
 {
     public function  CustomersDashboard(){
+
         $pending = OrderListing::where('order_status', 'Confirmed')->count();
         $cart= Cart::count();
         $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
-        return view('customer.customers_index',compact('cart','pendingOrders','pending'));
+
+        $product= Product::all();
+        $services = ServiceCategory::all();
+        return view('customer.customers_index',compact('cart','pendingOrders','pending','product','services'));
     }
 
    
@@ -100,7 +107,7 @@ class CustomerController extends Controller
 
 // customer product view 
 public function displayProduct(){
-    $product= Product::all();
+    $product= Product::orderBy('id','desc')->paginate(10);
     $no_cart= Cart::count();
     $pending = OrderListing::where('order_status', 'Confirmed')->count();
     $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
@@ -109,7 +116,7 @@ public function displayProduct(){
 
 // customer viw the servicess offer by the UPRESS
 public function ViewOfferServices(){
-    $services = ServiceCategory::all();
+    $services = ServiceCategory::orderBy('id')->paginate(10);
     $no_cart= Cart::count();
     $pending = OrderListing::where('order_status', 'Confirmed')->count();
     $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
@@ -137,11 +144,24 @@ public function CartNew(Request $request){
         if (Auth::check()) {
             // Fetch the authenticated user
             $user = Auth::user();
-         
         
+           
             // $prefix = "31182000"; 
             // $id=IdGenerator::generate(['table'=> 'service_parameter','field'=> 'id','length'=>6,'prefix'=>$prefix]);
             // Create a new cart instance
+            $existingItem = Cart::where('users_id', $user->id)
+            ->where('item_name', $request->item_name)
+            
+            ->where('color', $request->color)
+            ->where('sizeof', $request->sizeof)
+            ->first();
+
+        if ($existingItem) {
+            // If item already exists, update its quantity and total amount
+            $existingItem->quantity += $request->quantity;
+            $existingItem->total_amount = $existingItem->unit_price * $existingItem->quantity;
+            $existingItem->save();
+        } else {
             $cart = new Cart();
 
             // Assign user's information to the cart instance
@@ -152,7 +172,7 @@ public function CartNew(Request $request){
             $cart->college = $user->college;
             $cart->department = $user->department;
             $cart->contact_no = $user->contact_no;
-            
+            $cart->cust_code = $user->cust_code;
             // Assign other relevant user information to corresponding columns in the cart table
             // $cart->id=$id;
             $cart->image= $request->image;
@@ -160,7 +180,13 @@ public function CartNew(Request $request){
             $cart->type= $request->type;
             $cart->services= $request->services;
             $cart->type_services= $request->type_services;
-            $cart->color= $request->color;
+
+                      // Handle the "Other" color option
+                      if ($request->color === 'other') {
+                        $cart->color = $request->other_color; // Use the value entered in the "other_color" input field
+                    } else {
+                        $cart->color = $request->color; // Use the selected color from the dropdown
+                    }
             $cart->sizeof= $request->sizeof;
             $cart->unit= $request->unit;
             $cart->quantity= $request->quantity;
@@ -173,7 +199,7 @@ public function CartNew(Request $request){
             // dd($cart);
             // Save the cart instance
             $cart->save();
-
+        }
             return redirect('/customer-upress-product')->with('message', 'Cart Added Successfully');
 
         } else {
@@ -302,8 +328,8 @@ public function  OrderList(){
         if (Auth::check()) {
             // Fetch the authenticated user
             $user = Auth::user();
-        //   $prefix = "1518119110"; 
-        //     $id=IdGenerator::generate(['table'=> 'service_parameter','field'=> 'id','length'=>6,'prefix'=>$prefix]);
+        //   $prefix = "1518040000"; 
+        //     $id=IdGenerator::generate(['table'=> 'order_listing','field'=> 'id','length'=>6,'prefix'=>$prefix]);
         $usersid=$user->id;
        $data= Cart::where('users_id','=',$usersid)->get();
        foreach ($data as $cartItem) {
@@ -311,6 +337,7 @@ public function  OrderList(){
         $order = new OrderListing;
         // $order->id=$id;
         $order->users_id = $usersid;
+        $order->cust_code = $cartItem->cust_code;
         $order->image=$cartItem->image;
         $order->item_name = $cartItem->item_name;
         $order->type = $cartItem->type;
@@ -327,8 +354,8 @@ public function  OrderList(){
 
         $order->color = $cartItem->color;
         // Generate a UUID and make it short
-        $shortUuid = substr((string) Str::uuid(), 0, 8); // Adjust the length as needed
-        $order->uuid = $shortUuid;
+        // $shortUuid = substr((string) Str::uuid(), 0, 8); // Adjust the length as needed
+        // $order->uuid = $shortUuid;
         // dd($order);
 
         // Save the order
@@ -339,39 +366,7 @@ public function  OrderList(){
         $cartItem= Cart::find($cart_id);
         $cartItem->delete();
     }
-} // $prefix = "31182000"; 
-            // $id=IdGenerator::generate(['table'=> 'service_parameter','field'=> 'id','length'=>6,'prefix'=>$prefix]);
-            // Create a new cart instance
-            // $cart = Cart::where('id', $id)->first();
-
-            // // Assign user's information to the cart instance
-
-            // $cart->lastname = $user->lastname;
-            // $cart->firstname = $user->firstname;
-            // $cart->email = $user->email;
-            // $cart->college = $user->college;
-            // $cart->department = $user->department;
-            // $cart->contact_no = $user->contact_no;
-            
-            // Assign other relevant user information to corresponding columns in the cart table
-            // $cart->id=$id;
-            // $cart->image= $request->image;
-            // $cart->item_name= $request->item_name;
-            // $cart->type= $request->type;
-            // $cart->services= $request->services;
-            // $cart->type_services= $request->type_services;
-            // $cart->color= $request->color;
-            // $cart->sizeof= $request->sizeof;
-            // $cart->unit= $request->unit;
-            // $cart->quantity= $request->quantity;
-            // $cart->unit_price= $request->unit_price;
-            // $cart->total_amount= $request->total_amount;
-            // $cart->product_id= $request->product_id;
-            // $cart->service_category_id= $request->service_category_id;
-         
-            // dd($cart);
-            // Save the cart instance
-            // $cart->save();
+}
 
             return redirect('/customer-orderslip')->with('message', 'Order Added Successfully');
 
@@ -395,7 +390,26 @@ public function Receipt(){
                       ->get();
                       $total= OrderListing::sum('total_amount');
                       $pending = OrderListing::where('order_status', 'Confirmed')->count();
-    return view('customer.orderlist.receipt_order',compact('newOrders','total','pending'));
+                      $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
+                      $date = OrderListing::select('id', 'created_at')
+                      ->where('users_id', $user->id)
+                      ->where('order_status', 'Pending')
+                      ->get();
+                      $customerId =$user->cust_code.'-'.$user->id; // Customer/User ID
+                      $orderId = $newOrders->pluck('id');
+                      $collegeType = $user->college; // Type of College
+                      $department = $user->department; // Department
+                      $groupedOrderIds = [];
+                      foreach ($newOrders as $order) {
+                          $orderId = $order->id;
+                          $groupedPart = substr($orderId, 0, 9); // Get the first 11 digits
+                          $lastTwoDigits = substr($orderId, -2); // Get the last two digits
+                          $groupedOrderIds[$groupedPart][] = $lastTwoDigits;
+                      }
+
+                      $orderlist=OrderListing::orderBy('id','desc')->paginate();
+                      $total=OrderListing::sum('total_amount');
+    return view('customer.orderlist.receipt_order',compact('orderlist','total','groupedOrderIds','date','newOrders','total','pending','pendingOrders','customerId','orderId','collegeType','department',));
 
 
 }
@@ -488,7 +502,7 @@ public function newlist(Request $request)
                         ->get();
 
     // Fetch additional order details
-    $customerId = $user->id; // Customer/User ID
+    $customerId =$user->cust_code.'-'.$user->id; // Customer/User ID
     $orderId = $newOrders->pluck('id');
     $collegeType = $user->college; // Type of College
     $department = $user->department; // Department
@@ -504,24 +518,239 @@ public function newlist(Request $request)
     $cart= Cart::count();
     $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
     $pending = OrderListing::where('order_status', 'Confirmed')->count();
+    $orderlist=OrderListing::orderBy('id','desc')->paginate();
+    $total=OrderListing::sum('total_amount');
+   
     // Pass data to the view
-    return view('customer.orderlist.view_orders', compact('cart','pendingOrders','groupedItems', 'total', 'date', 'customerId', 'orderId', 'collegeType', 'department', 'groupedOrderIds', 'status','pending'));
+    return view('customer.orderlist.view_orders', compact('total','orderlist','cart','pendingOrders','groupedItems', 'total', 'date', 'customerId', 'orderId', 'collegeType', 'department', 'groupedOrderIds', 'status','pending'));
 }
 
 
 // track order page by customers
 
-public function trackOrder(){
+public function trackOrder(Request $request){
     $user = Auth::user();
-         
+    $status = $request->input('status', 'all'); // Default value is 'all'
+
+          // Fetch orders for the authenticated user based on status
+    if ($status != 'all') {
+        $newOrders = OrderListing::where('users_id', $user->id)
+                                 ->where('order_status', $status)
+                                 ->get();
+    } else {
+        $newOrders = OrderListing::where('users_id', $user->id)->get(); // Fetch all orders
+    }
+
+    $date = OrderListing::select('id', 'created_at')
+    ->where('users_id', $user->id)
+    ->where('order_status', 'Pending')
+    ->get();
+
+
     $usersid=$user->id;
     $cart=Cart::where('users_id','=',$usersid)->get();
     $total= Cart::sum('total_amount');
     $carter= Cart::count();
     $pending = OrderListing::where('order_status', 'Confirmed')->count();
     $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
-    return view('customer.trackorders.view_track',compact('cart','total','carter','pendingOrders','pending'));
+    $customerId =$user->cust_code.'-'.$user->id; // Customer/User ID
+    $orderId = $newOrders->pluck('id');
+    $collegeType = $user->college; // Type of College
+    $department = $user->department; // Department
+    $groupedOrderIds = [];
+    foreach ($newOrders as $order) {
+        $orderId = $order->id;
+        $groupedPart = substr($orderId, 0, 9); // Get the first 11 digits
+        $lastTwoDigits = substr($orderId, -2); // Get the last two digits
+        $groupedOrderIds[$groupedPart][] = $lastTwoDigits;
+    }
+
+    $confirmOrders = OrderListing::where('order_status', 'Confirmed')->count();
+    $cancelledOrders = OrderListing::where('order_status', 'Cancelled')->count();
+    $orderslipOrders = OrderListing::where('order_status', 'OrderSlip')->count();
+    $paymentOrders = OrderListing::where('order_status', 'Payment')->count();
+    $processingOrders = OrderListing::where('order_status', 'Processing')->count();
+    $readyForPickupOrders = OrderListing::where('order_status', 'Ready for Pick up')->count();
+    $completedOrders = OrderListing::where('order_status', 'Completed')->count();
+
+ 
+
+
+    return view('customer.trackorders.view_track',compact('cart','total','carter','pendingOrders','pending','date', 'customerId', 'orderId', 'collegeType', 'department', 'groupedOrderIds', 'status',
+'confirmOrders','orderslipOrders','paymentOrders','processingOrders','readyForPickupOrders','cancelledOrders','completedOrders'));
 }
+
+// services adding cart to cart by customers
+
+public function Servicescart(Request $request){
+    try {
+        // Check if the user is authenticated
+        if (Auth::check()) {
+            // Fetch the authenticated user
+            $user = Auth::user();
+            // dd($user);
+            // Create a new cart instance
+              // Find existing item in the cart with the same color and size
+              $existingItem = Cart::where('users_id', $user->id)
+              ->where('services', $request->services)
+              ->where('type_services', $request->type_services)
+              ->where('color', $request->color)
+              ->where('sizeof', $request->sizeof)
+              ->first();
+
+          if ($existingItem) {
+              // If item already exists, update its quantity and total amount
+              $existingItem->quantity += $request->quantity;
+              $existingItem->total_amount = $existingItem->unit_price * $existingItem->quantity;
+              $existingItem->save();
+          } else {
+              // Create a new cart instance
+              $cart = new Cart();
+            $cart = new Cart();
+            
+            // Assign user's information to the cart instance
+            $cart->users_id = $user->id;
+            $cart->lastname = $user->lastname;
+            $cart->firstname = $user->firstname;
+            $cart->email = $user->email;
+            $cart->college = $user->college;
+            $cart->department = $user->department;
+            $cart->contact_no = $user->contact_no;
+            $cart->cust_code = $user->cust_code;
+
+            // Assign other relevant user information to corresponding columns in the cart table
+            $cart->image = $request->image;
+            $cart->type = $request->type;
+            $cart->services = $request->services;
+            $cart->type_services = $request->type_services;
+            
+            // Handle the "Other" color option
+            if ($request->color === 'other') {
+                $cart->color = $request->new_size; // Use the value entered in the "other_color" input field
+            } else {
+                $cart->color = $request->color; // Use the selected color from the dropdown
+            }
+                // Handle the "Other" color option
+                if ($request->sizeof === 'add') {
+                    $cart->sizeof = $request->other_color; // Use the value entered in the "other_color" input field
+                } else {
+                    $cart->sizeof = $request->sizeof; // Use the selected sizeof from the dropdown
+                }
+       
+            $cart->unit = $request->unit;
+            $cart->quantity = $request->quantity;
+            $cart->unit_price = $request->unit_price;
+            $cart->total_amount = $request->total_amount;
+            $cart->service_category_id = $request->service_category_id;
+            // dd($cart);
+            // Save the cart instance
+            $cart->save();
+            }
+            return redirect('/customer-upress-services')->with('message', 'Cart Added Successfully');
+
+        } else {
+            // User is not authenticated
+            // You can handle this case accordingly
+        }
+    } catch (\Exception $e) {
+        // Handle the exception
+        // Log the error or return an error response
+        dd($e);
+        return response()->json(['error' => 'An error occurred while processing the request.'], 500);
+    }
+}
+
+
+// edit services cart by customers
+public function cartEditServices($id){
+    $cart= Cart::find($id);
+    $carters= Cart::count();
+    $pending = OrderListing::where('order_status', 'Confirmed')->count();
+    $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
+    return view('customer.addcart.edit_cart_services',compact('cart','carters','pendingOrders','pending'));
+}
+// UPDATE THE SERVICES ORDER BY CUSATOMERS
+public function cartUpdateServices(Request $request,$id){
+    try {
+        // Check if the user is authenticated
+        if (Auth::check()) {
+            // Fetch the authenticated user
+            $user = Auth::user();
+            // dd($user);
+            // Create a new cart instance
+              // Find existing item in the cart with the same color and size
+        //       $existingItem = Cart::where('users_id', $user->id)
+        //       ->where('color', $request->color)
+        //       ->where('sizeof', $request->sizeof)
+        //       ->first();
+
+        //   if ($existingItem) {
+        //       // If item already exists, update its quantity and total amount
+        //       $existingItem->quantity += $request->quantity;
+        //       $existingItem->total_amount = $existingItem->unit_price * $existingItem->quantity;
+        //       $existingItem->save();
+        //   } else {
+              // Create a new cart instance
+              $cart = Cart::where('id', $id)->first();
+       
+            
+            // Assign user's information to the cart instance
+            $cart->users_id = $user->id;
+            $cart->lastname = $user->lastname;
+            $cart->firstname = $user->firstname;
+            $cart->email = $user->email;
+            $cart->college = $user->college;
+            $cart->department = $user->department;
+            $cart->contact_no = $user->contact_no;
+            $cart->cust_code = $user->cust_code;
+
+            // Assign other relevant user information to corresponding columns in the cart table
+            $cart->image = $request->image;
+            $cart->type = $request->type;
+            $cart->services = $request->services;
+            $cart->type_services = $request->type_services;
+            
+            // Handle the "Other" color option
+            if ($request->color === 'other') {
+                $cart->color = $request->new_size; // Use the value entered in the "other_color" input field
+            } else {
+                $cart->color = $request->color; // Use the selected color from the dropdown
+            }
+                // Handle the "Other" color option
+                if ($request->sizeof === 'add') {
+                    $cart->sizeof = $request->other_color; // Use the value entered in the "other_color" input field
+                } else {
+                    $cart->sizeof = $request->sizeof; // Use the selected sizeof from the dropdown
+                }
+       
+            $cart->unit = $request->unit;
+            $cart->quantity = $request->quantity;
+            $cart->unit_price = $request->unit_price;
+            $cart->total_amount = $request->total_amount;
+            $cart->service_category_id = $request->service_category_id;
+           
+           
+            // Save the cart instance
+            $cart->save();
+           
+            return redirect('/customer-add-cart')->with('message', 'Updated Services order Successfully');
+
+        } else {
+            // User is not authenticated
+            // You can handle this case accordingly
+        }
+    } catch (\Exception $e) {
+        // Handle the exception
+        // Log the error or return an error response
+        // dd($e);
+        return response()->json(['error' => 'An error occurred while processing the request.'], 500);
+    }
+}
+
+
+
+
+
 }
 
 

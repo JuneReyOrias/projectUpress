@@ -113,135 +113,265 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="text-content">
-                    <h4>Orders</h4>
-                    <h2>Receipt</h2>
+                    <h4>View</h4>
+                    <h2>Orders</h2>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<div class="products"  class="vh-100">
+<div class="products vh-100">
     <div class="container">
-        <div class="card card-body border rounded"  >
+       <div class="col-md-12">
+        <div class="filters">
+            <ul>
+                <li data-status="all" class="active">All Orders</li>
+                <li data-status="Pending">Pending</li>
+                <li data-status="Confirmed">Confirmed</li>
+                <li data-status="Declined">Declined</li>
+                <li data-status="Orderslip">Orderslip</li>
+                <li data-status="Ready for pick up">Ready for Pick Up</li>
+            </ul>
+        </div>
+            </div>
+        <div class="card card-body border rounded">
             @if (session()->has('message'))
             <div class="alert alert-success" id="success-alert">
-              <button type="button" class="close" data-dismiss="alert">x</button>
-        
-        
-                {{session()->get('message')}}
-              </div>
-              @endif
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-12">
-                
-                <article class="card">
-                    <div class="card-body row">
-                        <img  class="rounded-circles"style="width:90px; border-radius:40px; height:90px;" src="../landingpage/assets/images/wmsu.png" > 
-                        <div class="col"> <span>Western Mindanao State University</span><br><h3>UNIVERSITY PRESS</h3> <span>Zamboanga City</span></div>
-                       
-                        <div class="col "> <h3>ORDER SLIP</h3> </div>
-                        
-                        <div class="d-flex flex-column text-sm-right">
-                            <p class="mb-0">WMSU-UPRESS <span>FR-010</span></p>
-                            <p>riv no:<span class="font-weight-bold">_______</span></p>
-                        </div>
-                           
-                    </div>
-                </article>
-                <article class="card">
-                    <div class="card-body row">
-                        <div class="col"> <strong>Estimated Delivery time:</strong> <br>29 nov 2019 </div>
-                        <div class="col"> <strong>Shipping BY:</strong> <br> BLUEDART, | <i class="fa fa-phone"></i> +1598675986 </div>
-                        <div class="col"> <strong>Status:</strong> <br> Picked by the courier </div>
-                        <div class="col"> <strong>Tracking #:</strong> <br> BD045903594059 </div>
-                    </div>
-                </article>
-                
-                        {{-- <i class="text-info font-weight-bold">{{ $no_cart}}</i> items in your cart</p> --}}
-                <table id="shoppingCart" class="table table-condensed table-responsive">
-                    <thead>
-                        <tr>
-                            <th style="width:20%">Product</th>
-                            <th style="width:12%">Item-Name</th>
-                            <th style="width:12%">Type</th>
-                            <th style="width:12%">Color</th>
-                            <th style="width:12%">Quantity</th>
-                            <th style="width:12%">Unit Price</th>
-                            <th style="width:12%">Total Cost</th>
-                            
- 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            @foreach (  $newOrders as $carts )
-                                
-                       
-                            <td data-th="Product">
-                                <div class="row">
-                                   
-                                    <div class="col-md-9 text-left mt-sm-2">
-                                        <img src="/productimages/{{ $carts->image}}" alt="" class="img-fluid d-none d-md-block rounded mb-2 shadow ">
-                                    </div> 
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                {{ session()->get('message') }}
+            </div>
+            @endif
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12">
+                    <article class="card">
+                        <div class="card-body row">
+                            <div class="col-12">
+                                <img class="rounded-circles d-block mx-auto mb-4" style="max-width: 200%; height: auto; max-height: 300px;" src="../landingpage/assets/images/wmsu.png" alt="University Logo">
+                                <div class="text-center">
+                                    <span>Western Mindanao State University</span><br>
+                                    <h5>UNIVERSITY PRESS</h5>
+                                    <span>Zamboanga City</span>
                                 </div>
-                            </td>
-                            <td data-th="Price">{{ $carts->item_name}}</td>
-                            <td data-th="Price">{{ $carts->type}}</td>
-                            <td data-th="Price">{{ $carts->color}}</td>
-                            <td data-th="Quantity">{{ $carts->quantity}}
-                                {{-- <input type="number" class="form-control form-control-lg text-center" value="{{ $carts->quantity}}"> --}}
-                            </td>
-                            <td data-th="Price">{{ $carts->unit_price}}</td>
-                            <td data-th="Price">{{ $carts->total_amount}}</td>
+                                <div class="text-center d-none d-md-block">
+                                    <h5>ORDER SLIP</h5>
+                                </div>
+                                <div class="d-flex justify-content-md-between flex-column flex-md-row text-center">
+                                    <div class="mb-md-0">
+                                        <p>WMSU-UPRESS <span>FR-010</span></p>
+                                    </div>
+                                    <div class="mb-md-0">
+                                        @if ($date->count() > 0)
+                                        <p>riv no:<span class="font-weight-bold">_______</span></p>
+                                        <p>Order Date: <span class="font-weight-bold">{{ $date->first()->created_at->format('Y-m-d') }}</span></p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="card">
+                        <div class="card-body row">
+                            <div class="col"> <strong>CustomerID:</strong> <br> {{ $customerId }} </div>
+                            <div class="col"> <strong>OrderID:</strong> <br> 
+                                @foreach($groupedOrderIds as $groupedPart => $lastTwoDigits)
+                                    {{ $groupedPart . '-' . implode(', ', $lastTwoDigits) }} <br>
+                                @endforeach
+                            </div>
+                            <div class="col"> <strong>College:</strong> <br> {{ $collegeType }} </div>
+                            <div class="col"> <strong>Department:</strong> <br> {{ $department }} </div>
+                        </div>
+                    </article>
+                    
+                    <table id="shoppingCart" class="table table-condensed table-responsive">
+                        <thead>
+                            <tr>
+                                <th style="width:20%">Product Image</th>
+                                <th style="width:12%">Item-Name</th>
+                                <th style="width:12%">Type</th>
+                                <th style="width:12%">Color</th>
+                                <th style="width:12%">Quantity</th>
+                                <th style="width:12%">Unit Price</th>
+                                <th style="width:12%">Total Amount</th>
+                                <th style="width:12%">Status</th>
+    
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                @foreach ( $orderlist->where('type','product') as $carts )
+                                    
                            
-
-                            
-                            
-                        </tr>
-                        <tr>
-                            @endforeach
+                                <td data-th="Product">
+                                    <div class="row">
+                                       
+                                        <div class="col-md-9 text-left mt-sm-2">
+                                            <img src="/productimages/{{ $carts->image}}" alt="" class="img-fluid d-none d-md-block rounded mb-2 shadow ">
+                                        </div> 
+                                    </div>
+                                </td>
+                                <td data-th="Price">{{ $carts->item_name}}</td>
+                                <td data-th="Price">{{ $carts->type}}</td>
+                                <td data-th="Price">{{ $carts->color}}</td>
+                                <td data-th="Quantity">{{ $carts->quantity}}
+                                    {{-- <input type="number" class="form-control form-control-lg text-center" value="{{ $carts->quantity}}"> --}}
+                                </td>
+                                <td data-th="Price">{{ $carts->unit_price}}</td>
+                                <td data-th="Price">{{ $carts->total_amount}}</td>
+                                <td data-th="Price">{{ $carts->order_status}}</td>
+                                {{-- <td>
+                                    <div class="btn-group" role="group" aria-label="Actions">
+                                       
+    
+    
+    
+    
+                        <!-- Edit Button -->
+                        <a href="{{route('customer.addcart.edit_cart',$carts->id)}}" title="Edit">
+                            <button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                        </a>
+    
+    
+                                        <span class="mx-1"></span> <!-- Add space between icons -->
+                                        <form action="{{route('customer.addcart.delete',$carts->id)}}" method="post" accept-charset="UTF-8" style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm" title="Delete" onclick="return confirm(&quot;Confirm delete?&quot;)">
+                                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td> --}}
+                                
+                                
+                            </tr>
+                            <tr>
+                                @endforeach
+                                   
+                        </tbody>
+                    </table>
+                    <br>
+                    <table id="shoppingCart" class="table table-condensed table-responsive">
+                        <thead>
+                            <tr>
+                                <th style="width:20%">Services Image</th>
+                                <th style="width:12%">Category</th>
+                                <th style="width:12%">Type_services</th>
+                                <th style="width:12%">Color</th>
+                                <th style="width:12%">Size</th>
+                                <th style="width:12%">Quantity</th>
+                                <th style="width:12%">Unit Price</th>
+                                <th style="width:12%">Total Amount</th>
+                                
+    
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                @foreach (  $orderlist->where('type','services') as $services )
+                                    
+                           
+                                <td data-th="Product">
+                                    <div class="row">
+                                       
+                                        <div class="col-md-9 text-left mt-sm-2">
+                                            <img src="/servicesimages/{{ $services->image}}" alt="" class="img-fluid d-none d-md-block rounded mb-2 shadow ">
+                                        </div> 
+                                    </div>
+                                </td>
+                                <td data-th="Price">{{ $services->services}}</td>
+                                <td data-th="Price">{{ $services->type_services}}</td>
+                                <td data-th="Price">{{ $services->color}}</td>
+                                <td data-th="Price">{{ $services->sizeof}}</td>
+                                <td data-th="Quantity">{{ $services->quantity}}
+                                    {{-- <input type="number" class="form-control form-control-lg text-center" value="{{ $services->quantity}}"> --}}
+                                </td>
+                                <td data-th="Price">{{number_format( $services->unit_price,2)}}</td>
+                                <td data-th="Price">{{number_format( $services->total_amount,2)}}</td>
                                
-                    </tbody>
-                </table>
-                <div class="float-right text-right">
-                    <h4>Subtotal:</h4>
-                    <h1>{{$total}}</h1>
+                                {{-- <td>
+                                    <div class="btn-group" role="group" aria-label="Actions">
+                                       
+    
+    
+    
+    
+                        <!-- Edit Button -->
+                        <a href="{{route('customer.addcart.edit_cart_services',$services->id)}}" title="Edit">
+                            <button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                        </a>
+    
+    
+                                        <span class="mx-1"></span> <!-- Add space between icons -->
+                                        <form action="{{route('customer.addcart.delete',$services->id)}}" method="post" accept-charset="UTF-8" style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm" title="Delete" onclick="return confirm(&quot;Confirm delete?&quot;)">
+                                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td> --}}
+                                
+                                
+                            </tr>
+                            <tr>
+                                @endforeach
+                                   
+                        </tbody>
+                    </table>
+
+                    <div class="float-right text-right d-flex justify-content-end">
+                        {{-- <div class="mr-3">
+                            <span>Total Qty:</span>
+                            <span><strong>{{ $totalQuantity }}</strong></span>   <br>
+                        </div> --}}
+                       
+                        <div>
+                            <span>Total Amount:</span>
+                            <span><strong>Php{{ number_format($total, 2) }}</strong></span>
+                        </div>
+                    </div>
+                    
+                   
                 </div>
+                <a href="" class="btn btn-primary">Download Receipt as PDF</a>
             </div>
-        </div>
-        <div class="row mt-4 d-flex align-items-center">
-            <div class="col-sm-6 order-md-1 text-left">
-                <form id="checkoutForm" action="{{route('customer.orderlist.confirm_order')}}" method="GET">
-                    @csrf <!-- Include CSRF token for Laravel -->
-                    <!-- You can include hidden input fields here to pass additional data if needed -->
-                    <!-- For example: -->
-                    <!-- <input type="hidden" id="additionalData" name="additionalData" value="someValue"> -->
-                    <button type="button" class="btn btn-primary mb-4 btn-lg pl-5 pr-5" onclick="prepareCheckout()">Checkout</button>
-                </form>
-            </div>
+            
         </div>
     </div>
 </div>
-</div>
-</div>
-            <script>
-                function prepareCheckout() {
-                    // Gather data from the page
-                    // Example: If you have input fields with IDs, you can get their values like this:
-                    // var additionalData = document.getElementById('additionalData').value;
-            
-                    // If you have multiple fields to collect data from, gather them similarly
-            
-                    // Once you have collected all the data you need, populate the form fields
-                    // Example:
-                    // document.getElementById('additionalData').value = additionalData;
-            
-                    // Submit the form
-                    document.getElementById('checkoutForm').submit();
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.filters ul li').on('click', function() {
+            // Remove the 'active' class from all filter options
+            $('.filters ul li').removeClass('active');
+
+            // Add the 'active' class to the clicked filter option
+            $(this).addClass('active');
+
+            // Get the status value from the clicked filter option
+            var status = $(this).data('status');
+
+            // Send an AJAX request to fetch orders based on the selected status
+            $.ajax({
+                url: '{{ route('customer.orderlist.view_orders') }}', // Adjust the route to your controller method
+                type: 'GET',
+                data: { status: status },
+                success: function(data) {
+                    // Replace the content of the orders section with the updated orders
+                    $('#orders').html(data);
+                },
+                error: function(xhr, status, error) {
+                    // Handle errors if any
+                    console.error(error);
                 }
-            </script>
-            
+            });
+        });
+    });
+</script>
+
 <!-- Add your JavaScript files here -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>

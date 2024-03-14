@@ -133,6 +133,8 @@ Route::get('/customer-upress-product', [CustomerController::class, 'displayProdu
 
 // customer view the services offer by upress
 Route::get('/customer-upress-services', [CustomerController::class, 'ViewOfferServices'])->name('customer.custservices.service_view');
+// adding cart of services by customers
+Route::post('/customer-upress-services', [CustomerController::class, 'Servicescart']);
 
 
 // adding orders to cart
@@ -140,8 +142,9 @@ Route::get('/customer-add-cart', [CustomerController::class, 'AddToCart'])->name
 Route::delete('/customer-delete-cart/{cart}', [CustomerController::class, 'cartdelete'])->name('customer.addcart.delete');
 Route::get('/customer-edit-product/{cart}', [CustomerController::class, 'cartforedit'])->name('customer.addcart.edit_cart');
 Route::post('/customer-edit-product/{cart}', [CustomerController::class, 'UpdateCarts']);
-
-
+// edit cart of services by customers
+Route::get('/customer-edit-services/{cart}', [CustomerController::class, 'cartEditServices'])->name('customer.addcart.edit_cart_services');//edit link for services orders update
+Route::post('/customer-edit-services/{cart}', [CustomerController::class, 'cartUpdateServices']);//fetch new update of services order customers
 
 // adding orders to cart
 Route::post('/customer-upress-product', [CustomerController::class, 'CartNew']);
@@ -167,5 +170,13 @@ Route::post('/admin-add-new-accounts',[AdminController::class,'AccountAdd']);//s
 Route::get('/admin-update-account/{accounts}',[AdminController::class,'EditAccount'])->name('admin.accounts.update_acc');//fetch accounts id or find the  Id 
 Route::post('/admin-update-account/{accounts}',[AdminController::class,'UpdateAccount']);//update the accounts
 Route::delete('/admin-delete-accounts/{accounts}',[AdminController::class,'DeleteAcc'])->name('admin.accounts.delete');//deleting  accounts
+
+
+// orders view by admin 
+Route::get('/admin-view-customers-orders',[AdminController::class, 'customersOrders'])->name('admin.customerOrders.view_orders');
+Route::get('/admin-check-customers-orders/{ordersEdit}',[AdminController::class,'ordersAdmin'])->name('admin.customerOrders.edit_orders');
+Route::post('/admin-check-customers-orders/{ordersEdit}',[AdminController::class,'ordersCustoUpdate']);
+
+
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
+use App\Models\OrderListing;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -38,8 +39,8 @@ class AdminController extends Controller
 
     public function AdminProfile(){
         $id =Auth::user()->id;
-        $profileData = User:: find($id);
-        return view('admin.admin_profile', compact('profileData'));
+        $admin = User:: find($id);
+        return view('admin.admin_profile', compact('admin'));
     }
   
     public function updateAdmin(Request $request){
@@ -280,4 +281,72 @@ public function DeleteAcc($id) {
         return redirect()->back()->with('error', 'Error deleting personal information: ' . $e->getMessage());
     }
 }
+
+// admin view the customers orders only admin can access
+public function customersOrders(){
+    $ordersCust= OrderListing::OrderBy('id','desc')->paginate(10);
+    // $ordersCust->load('product','service_category','users'); // Assuming 'product' is the relationship name between OrderListing and Product
+    $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
+    return view('admin.customerOrders.view_orders',compact('ordersCust','pendingOrders'));
+}
+// updating 
+public function ordersAdmin($id){
+    $ordersEdit=OrderListing::find($id);
+    return view('admin.customerOrders.edit_orders',compact('ordersEdit'));
+}
+
+// update customer orders accessby admin
+public function ordersCustoUpdate(Request $request,$id){
+    try {
+        // Check if the user is authenticated
+        if (Auth::check()) {
+            // Fetch the authenticated user
+            $user = Auth::user();
+         
+        
+            // $prefix = "31182000"; 
+            // $id=IdGenerator::generate(['table'=> 'service_parameter','field'=> 'id','length'=>6,'prefix'=>$prefix]);
+            // Create a new cart instance
+            $cart = OrderListing::where('id', $id)->first();
+
+            // Assign user's information to the cart instance
+
+
+            
+            // Assign other relevant user information to corresponding columns in the cart table
+            // $cart->id=$id;
+            $cart->order_status= $request->order_status;
+            $cart->users_id= $request->users_id;
+            $cart->image= $request->image;
+            $cart->item_name= $request->item_name;
+            $cart->type= $request->type;
+            $cart->services= $request->services;
+            $cart->type_services= $request->type_services;
+            $cart->color= $request->color;
+            $cart->sizeof= $request->sizeof;
+            $cart->unit= $request->unit;
+            $cart->quantity= $request->quantity;
+            $cart->unit_price= $request->unit_price;
+            $cart->total_amount= $request->total_amount;
+            $cart->product_id= $request->product_id;
+            $cart->service_category_id= $request->service_category_id;
+         
+            // dd($cart);
+            // Save the cart instance
+            $cart->save();
+
+            return redirect('/admin-view-customers-orders')->with('message', 'Order Updated Successfully');
+
+        } else {
+            // User is not authenticated
+            // You can handle this case accordingly
+        }
+    } catch (\Exception $e) {
+        // Handle the exception
+        // Log the error or return an error response
+        dd($e);
+        return response()->json(['error' => 'An error occurred while processing the request.'], 500);
+    }
+}
+
 }

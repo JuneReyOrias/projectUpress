@@ -180,75 +180,158 @@
                                     {{ $groupedPart . '-' . implode(', ', $lastTwoDigits) }} <br>
                                 @endforeach
                             </div>
-                            <div class="col"> <strong>Type:</strong> <br> {{ $collegeType.' '. $department }} </div>
-                            <div class="col"> <strong>Type of Job:</strong> <br> {{ $department }} </div>
+                            <div class="col"> <strong>College:</strong> <br> {{ $collegeType }} </div>
+                            <div class="col"> <strong>Department:</strong> <br> {{ $department }} </div>
                         </div>
                     </article>
                     
                     <table id="shoppingCart" class="table table-condensed table-responsive">
                         <thead>
                             <tr>
-                                <th style="width:20%">Product</th>
+                                <th style="width:20%">Product Image</th>
                                 <th style="width:12%">Item-Name</th>
                                 <th style="width:12%">Type</th>
                                 <th style="width:12%">Color</th>
                                 <th style="width:12%">Quantity</th>
                                 <th style="width:12%">Unit Price</th>
-                                <th style="width:12%">Total Cost</th>
-                                <th style="width:12%">Order Status</th>
+                                <th style="width:12%">Total Amount</th>
+                                <th style="width:12%">Status</th>
+    
                             </tr>
                         </thead>
                         <tbody>
-                            @php
-                            $totalQuantity = 0;
-                            $totalCost = 0;
-                            @endphp
-                            @foreach ($groupedItems as $itemName => $items)
-                            @php
-                            $groupedColors = $items->groupBy('color');
-                            @endphp
-                            @foreach ($groupedColors as $colorName => $colorItems)
                             <tr>
+                                @foreach ( $orderlist->where('type','product') as $carts )
+                                    
+                           
                                 <td data-th="Product">
                                     <div class="row">
+                                       
                                         <div class="col-md-9 text-left mt-sm-2">
-                                            @foreach ($colorItems as $item)
-                                            <img src="/productimages/{{ $item->image }}" alt="" class="img-fluid rounded mb-2 shadow">
-                                            @endforeach
-                                        </div>
+                                            <img src="/productimages/{{ $carts->image}}" alt="" class="img-fluid d-none d-md-block rounded mb-2 shadow ">
+                                        </div> 
                                     </div>
                                 </td>
-                                <td data-th="Price">{{ $itemName }}</td>
-                                <td data-th="Price">{{ $colorItems->first()->type }}</td>
-                                <td data-th="Price">{{ $colorName }}</td>
-                                <td data-th="Quantity">{{ $colorItems->sum('quantity') }}</td>
-                                <td data-th="Price">{{ $colorItems->first()->unit_price }}</td>
-                                <td data-th="Price">{{ $colorItems->sum('total_amount') }}</td>
-                                <td data-th="Order Status">
-                                    <!-- Display order status here -->
-                                    {{ $colorItems->first()->order_status }}
+                                <td data-th="Price">{{ $carts->item_name}}</td>
+                                <td data-th="Price">{{ $carts->type}}</td>
+                                <td data-th="Price">{{ $carts->color}}</td>
+                                <td data-th="Quantity">{{ $carts->quantity}}
+                                    {{-- <input type="number" class="form-control form-control-lg text-center" value="{{ $carts->quantity}}"> --}}
                                 </td>
-            
+                                <td data-th="Price">{{ $carts->unit_price}}</td>
+                                <td data-th="Price">{{ $carts->total_amount}}</td>
+                                <td data-th="Price">{{ $carts->order_status}}</td>
+                                {{-- <td>
+                                    <div class="btn-group" role="group" aria-label="Actions">
+                                       
+    
+    
+    
+    
+                        <!-- Edit Button -->
+                        <a href="{{route('customer.addcart.edit_cart',$carts->id)}}" title="Edit">
+                            <button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                        </a>
+    
+    
+                                        <span class="mx-1"></span> <!-- Add space between icons -->
+                                        <form action="{{route('customer.addcart.delete',$carts->id)}}" method="post" accept-charset="UTF-8" style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm" title="Delete" onclick="return confirm(&quot;Confirm delete?&quot;)">
+                                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td> --}}
+                                
                                 
                             </tr>
-                            @php
-                            $totalQuantity += $colorItems->sum('quantity');
-                            $totalCost += $colorItems->sum('total_amount');
-                            @endphp
-                            @endforeach
-                            @endforeach
+                            <tr>
+                                @endforeach
+                                   
+                        </tbody>
+                    </table>
+                    <br>
+                    <table id="shoppingCart" class="table table-condensed table-responsive">
+                        <thead>
+                            <tr>
+                                <th style="width:20%">Services Image</th>
+                                <th style="width:12%">Category</th>
+                                <th style="width:12%">Type_services</th>
+                                <th style="width:12%">Color</th>
+                                <th style="width:12%">Size</th>
+                                <th style="width:12%">Quantity</th>
+                                <th style="width:12%">Unit Price</th>
+                                <th style="width:12%">Total Amount</th>
+                                <th style="width:12%">Status</th>
+    
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                @foreach (  $orderlist->where('type','services') as $services )
+                                    
+                           
+                                <td data-th="Product">
+                                    <div class="row">
+                                       
+                                        <div class="col-md-9 text-left mt-sm-2">
+                                            <img src="/servicesimages/{{ $services->image}}" alt="" class="img-fluid d-none d-md-block rounded mb-2 shadow ">
+                                        </div> 
+                                    </div>
+                                </td>
+                                <td data-th="Price">{{ $services->services}}</td>
+                                <td data-th="Price">{{ $services->type_services}}</td>
+                                <td data-th="Price">{{ $services->color}}</td>
+                                <td data-th="Price">{{ $services->sizeof}}</td>
+                                <td data-th="Quantity">{{ $services->quantity}}
+                                    {{-- <input type="number" class="form-control form-control-lg text-center" value="{{ $services->quantity}}"> --}}
+                                </td>
+                                <td data-th="Price">{{number_format( $services->unit_price,2)}}</td>
+                                <td data-th="Price">{{number_format( $services->total_amount,2)}}</td>
+                                <td data-th="Price">{{ $services->order_status}}</td>
+                                {{-- <td>
+                                    <div class="btn-group" role="group" aria-label="Actions">
+                                       
+    
+    
+    
+    
+                        <!-- Edit Button -->
+                        <a href="{{route('customer.addcart.edit_cart_services',$services->id)}}" title="Edit">
+                            <button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                        </a>
+    
+    
+                                        <span class="mx-1"></span> <!-- Add space between icons -->
+                                        <form action="{{route('customer.addcart.delete',$services->id)}}" method="post" accept-charset="UTF-8" style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm" title="Delete" onclick="return confirm(&quot;Confirm delete?&quot;)">
+                                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td> --}}
+                                
+                                
+                            </tr>
+                            <tr>
+                                @endforeach
+                                   
                         </tbody>
                     </table>
 
                     <div class="float-right text-right d-flex justify-content-end">
-                        <div class="mr-3">
+                        {{-- <div class="mr-3">
                             <span>Total Qty:</span>
                             <span><strong>{{ $totalQuantity }}</strong></span>   <br>
-                        </div>
+                        </div> --}}
                        
                         <div>
                             <span>Total Amount:</span>
-                            <span><strong>Php{{ number_format($totalCost, 2) }}</strong></span>
+                            <span><strong>Php{{ number_format($total, 2) }}</strong></span>
                         </div>
                     </div>
                     

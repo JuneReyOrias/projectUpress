@@ -59,19 +59,19 @@
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#forms" role="button" aria-expanded="false" aria-controls="forms">
               <i class="link-icon" data-feather="shopping-cart"></i>
-              <span class="link-title">Orders</span>
+              <span class="link-title">Orders</span> <span class="badge bg-primary"> 0</span>
               <i class="link-arrow" data-feather="chevron-down"></i>
             </a>
             <div class="collapse" id="forms">
               <ul class="nav sub-menu">
                 <li class="nav-item">
-                  <a href="" class="nav-link">Customers Orders</a>
+                  <a href="{{route('admin.customerOrders.view_orders')}}" class="nav-link">Customer Orders</a>
                 </li>
               
               </ul>
             </div>
           </li>
-          <li class="nav-item">
+          {{-- <li class="nav-item">
             <a class="nav-link"  data-bs-toggle="collapse" href="#sales" role="button" aria-expanded="false" aria-controls="calendar">
               <i class="link-icon" data-feather="bar-chart-2"></i>
               <span class="link-title">Sales</span>
@@ -110,7 +110,7 @@
                 </li>
               </ul>
             </div>
-          </li>
+          </li> --}}
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#tables" role="button" aria-expanded="false" aria-controls="tables">
               <i class="link-icon" data-feather="book"></i>

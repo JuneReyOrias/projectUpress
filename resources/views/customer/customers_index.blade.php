@@ -195,24 +195,24 @@
     <!-- Banner Starts Here -->
     <div class="banner header-text">
       <div class="owl-banner owl-carousel">
-        <div class="banner-item-01" style="background-image: url('../landingpage/assets/images/slide_01.jpg');" >
+        <div class="banner-item-01" style="background-image: url('../landingpage/assets/images/wmsu.jpg');" >
        
           <div class="text-content">
-            <h4>Best Offer</h4>
-            <h2>New Arrivals On Sale</h2>
+            <h4>WMSU</h4>
+            <h2>UPRESS</h2></h2>
           </div>
         </div>
         <div class="banner-item-02" style="background-image: url('../landingpage/assets/images/slide_02.jpg');">
 
           <div class="text-content">
-            <h4>Flash Deals</h4>
-            <h2>Get your best products</h2>
+            <h4>UPRESS</h4>
+            <h2>Products</h2>
           </div>
         </div>
         <div class="banner-item-03" style="background-image: url('../landingpage/assets/images/slide_03.jpg');">
           <div class="text-content">
-            <h4>Last Minute</h4>
-            <h2>Grab last minute deals</h2>
+            <h4>UPRESS</h4>
+            <h2>Services</h2>
           </div>
         </div>
       </div>
@@ -225,120 +225,221 @@
           <div class="col-md-12">
             <div class="section-heading">
               <h2>Latest Products</h2>
-              <a href="{{route('homeproduct.view')}}">view all products <i class="fa fa-angle-right"></i></a>
+              <a href="{{route('customer.custproduct.prod_view')}}">view all products <i class="fa fa-angle-right"></i></a>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="product-item">
-              <a href="#"><img src="../landingpage/assets/images/product_01.jpg" alt=""></a>
-              <div class="down-content">
-                <a href="#"><h4>Tittle goes here</h4></a>
-                <h6>$25.75</h6>
-                <p>Lorem ipsume dolor sit amet, adipisicing elite. Itaque, corporis nulla aspernatur.</p>
-                <ul class="stars">
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                </ul>
-                <span>Reviews (24)</span>
+          <div class="col-md-12">
+            <div class="filters-content">
+                <div class="row grid">
+                  @foreach ($product as $order)
+
+                  <div class="col-lg-4 col-md-4 all des">
+                      <div class="product-item">
+                          <a href="#"><img src="/productimages/{{$order->image}}" alt="" style="width: 100%; height: 200px;border-radius: 10px;"></a>
+                          <div class="down-content">
+                              <a href="#">
+                                  <h4 class="">{{$order->product_name}}</h4>
+                              </a>
+                              <input type="hidden" class="service-id" id="service_id" value="{{ $order->id }}">
+                              <div class="" style="gap:5px;"><h6>Php {{number_format($order->unit_price,2)}}</h6></div>
+                              
+                              <h4>Description:<p>{{$order->descritpion}}</p></h4>
+                              <p>Stocks: {{$order->stocks}}</p>
+                              <p>Status: {{$order->status}}</p>
+                              
+                              <!-- Add Cart button with onclick event -->
+                              {{-- <button class="btn add-to-cart" data-service-id="{{ $order->id }}" data-service-type="product" data-service-image="{{$order->image}}" onclick="openModal('{{$order->product_name}}', '{{$order->unit_price}}', '{{$order->image}}', '{{$order->id}}')">Add Cart</button> --}}
+
+                          </div>
+                      </div>
+                  </div>
+                  @endforeach
+                                      
+          <!-- Modal -->
+              <div id="cartModal" class="modal">
+                  <div class="modal-content">
+                      <span class="close" onclick="closeModal()">&times;</span>
+                      <h2>Add to Cart</h2>
+                      <p id="productName"></p>
+                      
+                      <!-- Form for color select, quantity input, and other color input -->
+                      <form action{{url('CartNew')}} method="post" enctype="multipart/form-data">
+                          @csrf
+                          <div class="form-row">
+                              <div class="col-md-4 form-group">
+                                  <label for="typeSelect">Type:</label>
+                                  <select id="typeSelect" name="type" class="form-control">
+                                      <option value="product">Product</option>
+                                      <option value="services">Services</option>
+                                   
+                                      <!-- Add more color options as needed -->
+                                  </select>
+                              </div>
+                              
+                              <!-- Color Select Column -->
+                              <div class="col-md-4 form-group">
+                                  <label for="colorSelect">Select Color:</label>
+                                  <select id="colorSelect" name="color" onchange="checkColor()" class="form-control">
+                                      <option value="red">Red</option>
+                                      <option value="blue">Blue</option>
+                                      <option value="green">Green</option>
+                                      <option value="other">Other</option>
+                                      <!-- Add more color options as needed -->
+                                  </select>
+                              </div>
+                              
+                              <!-- Quantity Input Column -->
+                              <div class="col-md-4 form-group">
+                                  <label for="quantityInput">Quantity:</label>
+                                  <input type="number" id="quantityInput" name="quantity" value="1" min="1" class="form-control" onchange="calculateTotal()">
+                              </div>
+                              
+                              <div class="col-md-4 form-group">
+                                  <label for="totalPrice">Total Price:</label>
+                                  <input type="text" id="totalPrice" name="total_amount" class="form-control" readonly>
+                              </div>
+                          </div>
+                      
+                          <!-- Other Color Input -->
+                          <div class="form-group" id="otherColorInputContainer" style="display: none;">
+                              <label for="otherColorInput">Enter Color:</label>
+                              <input type="text" id="otherColorInput" name="other_color"class="form-control" placeholder="Enter Color">
+                          </div>
+                          <input type="hidden" id="serviceIdInput" name="product_id" class="form-control" id="orderId">
+                          <!-- Hidden input fields for product name, price, and user ID -->
+                          <input type="hidden" id="productNameInput" name="item_name" value="{{$order->product_name}}">
+                          {{-- <input type="hidden" id="productPriceInput" name="unit_price"> --}}
+                          <input type="hidden" id="productPriceInput" name="unit_price" id="productPrice">
+                          {{-- <input type="hidden" id="serviceIdInput" name="product_id" id="orderId"> --}}
+                          <input type="hidden" name="users_id" value="{{$order->users_id}}">
+                          <input type="hidden" id="userIdInput" name="image" value="{{$order->image}}">
+                          
+                          <!-- Submit Button -->
+                          <button type="submit" class="btn btn-primary">Add to Cart</button>
+                      </form>
+                  </div>
               </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="product-item">
-              <a href="#"><img src="../landingpage/assets/images/product_02.jpg" alt=""></a>
-              <div class="down-content">
-                <a href="#"><h4>Tittle goes here</h4></a>
-                <h6>$30.25</h6>
-                <p>Lorem ipsume dolor sit amet, adipisicing elite. Itaque, corporis nulla aspernatur.</p>
-                <ul class="stars">
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                </ul>
-                <span>Reviews (21)</span>
               </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="product-item">
-              <a href="#"><img src="../landingpage/assets/images/product_03.jpg" alt=""></a>
-              <div class="down-content">
-                <a href="#"><h4>Tittle goes here</h4></a>
-                <h6>$20.45</h6>
-                <p>Sixteen Clothing is free CSS template provided by TemplateMo.</p>
-                <ul class="stars">
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                </ul>
-                <span>Reviews (36)</span>
               </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="product-item">
-              <a href="#"><img src="../landingpage/assets/images/product_04.jpg" alt=""></a>
-              <div class="down-content">
-                <a href="#"><h4>Tittle goes here</h4></a>
-                <h6>$15.25</h6>
-                <p>Lorem ipsume dolor sit amet, adipisicing elite. Itaque, corporis nulla aspernatur.</p>
-                <ul class="stars">
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                </ul>
-                <span>Reviews (48)</span>
+              <script>
+                  // Inside the openModal function
+                  function openModal(productName, productPrice, userId, orderId) {
+                      document.getElementById("productName").textContent = productName;
+                      document.getElementById("productNameInput").value = productName;
+                      document.getElementById("productPriceInput").value = productPrice;
+                      document.getElementById("userIdInput").value = userId;
+                      document.getElementById("serviceIdInput").value = orderId; // Set the value of serviceIdInput
+                      document.getElementById("cartModal").style.display = "block";
+                      calculateTotal(); // Calculate total price initially
+                  }
+
+
+              function closeModal() {
+                  document.getElementById("cartModal").style.display = "none";
+              }
+
+              function checkColor() {
+                  var colorSelect = document.getElementById("colorSelect");
+                  var otherColorInputContainer = document.getElementById("otherColorInputContainer");
+                  if (colorSelect.value === "other") {
+                      otherColorInputContainer.style.display = "block";
+                  } else {
+                      otherColorInputContainer.style.display = "none";
+                  }
+              }
+
+            
+              </script>
+<script>
+function calculateTotal() {
+// Get the quantity input value
+var quantity = parseInt(document.getElementById("quantityInput").value);
+
+// Get the unit price from the hidden input field or any other source
+var unitPrice = parseFloat(document.getElementById("productPriceInput").value);
+
+// Calculate the total price by multiplying quantity and unit price
+var totalPrice = quantity * unitPrice;
+
+// Display the total price in the "Total Price" input field
+document.getElementById("totalPrice").value = totalPrice.toFixed(2); // Ensure to format the total price as needed
+}
+
+</script>
+
+
+<!-- Add your JavaScript files here -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+// Function to fetch and display notifications
+function fetchNotifications() {
+  // Simulate fetching notifications from the server
+  // Replace this with actual AJAX call to fetch notifications
+  const notifications = [
+      { title: "New Order Received", time: "30 min ago" },
+      { title: "Server Limit Reached!", time: "1 hr ago" },
+      { title: "New customer registered", time: "2 sec ago" }
+      // Add more notifications as needed
+  ];
+
+  // Clear existing notifications
+  $("#notificationDropdownMenu").empty();
+
+  // Update notification count
+  $("#notificationCount").text(notifications.length);
+
+  // Populate notification items
+  notifications.forEach(notification => {
+      $("#notificationDropdownMenu").append(`
+          <a href="#" class="dropdown-item d-flex align-items-center py-2">
+              <div class="wd-30 ht-30 d-flex align-items-center justify-content-center bg-primary rounded-circle me-3">
+                  <i class="far fa-bell"></i>
               </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="product-item">
-              <a href="#"><img src="../landingpage/assets/images/product_05.jpg" alt=""></a>
-              <div class="down-content">
-                <a href="#"><h4>Tittle goes here</h4></a>
-                <h6>$12.50</h6>
-                <p>Lorem ipsume dolor sit amet, adipisicing elite. Itaque, corporis nulla aspernatur.</p>
-                <ul class="stars">
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                </ul>
-                <span>Reviews (16)</span>
+              <div class="flex-grow-1 me-2">
+                  <p>${notification.title}</p>
+                  <p class="tx-12 text-muted">${notification.time}</p>
               </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="product-item">
-              <a href="#"><img src="../landingpage/assets/images/product_06.jpg" alt=""></a>
-              <div class="down-content">
-                <a href="#"><h4>Tittle goes here</h4></a>
-                <h6>$22.50</h6>
-                <p>Lorem ipsume dolor sit amet, adipisicing elite. Itaque, corporis nulla aspernatur.</p>
-                <ul class="stars">
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                  <li><i class="fa fa-star"></i></li>
-                </ul>
-                <span>Reviews (32)</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </a>
+      `);
+  });
+}
+
+// Function to mark all notifications as read
+function markAllNotificationsAsRead() {
+  // Perform actions to mark notifications as read
+  // This function can be called when "Clear all" is clicked
+  $("#notificationDropdownMenu").empty();
+  $("#notificationCount").text("0");
+}
+
+// Fetch notifications when document is ready
+$(document).ready(function() {
+  fetchNotifications();
+});
+</script>
+<script>
+document.querySelectorAll('.add-to-cart').forEach(button => {
+  button.addEventListener('click', function() {
+      const orderId = this.getAttribute('data-service-id');
+      const typeServices = this.getAttribute('data-service-type');
+      const typeImage = this.getAttribute('data-service-image');
+      document.getElementById('serviceIdInput').value = orderId;
+      document.getElementById('typeServicesInput').value = typeServices;
+      document.getElementById('typeImagesInput').value = typeImage;
+      document.getElementById('serviceId').textContent = serviceId;
+  });
+});
+
+function addToCart() {
+  const orderId = document.getElementById('serviceIdInput').value;
+  const typeServices = document.getElementById('typeServicesInput').value;
+  const typeImage = document.getElementById('typeImagesInput').value;
+  console.log('Service ID:', orderId);
+  console.log('Type Services:', typeServices);
+  console.log('Type Image:', typeImage );
+  // Add logic to add the service to the cart
+}
+</script>
 {{-- end products list --}}
 
 {{-- start point of services --}}
@@ -348,120 +449,395 @@
       <div class="col-md-12">
         <div class="section-heading">
           <h2>Latest Servicess</h2>
-          <a href="{{route('homeservices.serve')}}">view all services <i class="fa fa-angle-right"></i></a>
+          <a href="{{route('customer.custservices.service_view')}}">view all services <i class="fa fa-angle-right"></i></a>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="product-item">
-          <a href="#"><img src="../landingpage/assets/images/product_01.jpg" alt=""></a>
-          <div class="down-content">
-            <a href="#"><h4>Tittle goes here</h4></a>
-            <h6>$25.75</h6>
-            <p>Lorem ipsume dolor sit amet, adipisicing elite. Itaque, corporis nulla aspernatur.</p>
-            <ul class="stars">
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-            </ul>
-            <span>Reviews (24)</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="product-item">
-          <a href="#"><img src="../landingpage/assets/images/product_02.jpg" alt=""></a>
-          <div class="down-content">
-            <a href="#"><h4>Tittle goes here</h4></a>
-            <h6>$30.25</h6>
-            <p>Lorem ipsume dolor sit amet, adipisicing elite. Itaque, corporis nulla aspernatur.</p>
-            <ul class="stars">
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-            </ul>
-            <span>Reviews (21)</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="product-item">
-          <a href="#"><img src="../landingpage/assets/images/product_03.jpg" alt=""></a>
-          <div class="down-content">
-            <a href="#"><h4>Tittle goes here</h4></a>
-            <h6>$20.45</h6>
-            <p>Sixteen Clothing is free CSS template provided by TemplateMo.</p>
-            <ul class="stars">
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-            </ul>
-            <span>Reviews (36)</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="product-item">
-          <a href="#"><img src="../landingpage/assets/images/product_04.jpg" alt=""></a>
-          <div class="down-content">
-            <a href="#"><h4>Tittle goes here</h4></a>
-            <h6>$15.25</h6>
-            <p>Lorem ipsume dolor sit amet, adipisicing elite. Itaque, corporis nulla aspernatur.</p>
-            <ul class="stars">
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-            </ul>
-            <span>Reviews (48)</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="product-item">
-          <a href="#"><img src="../landingpage/assets/images/product_05.jpg" alt=""></a>
-          <div class="down-content">
-            <a href="#"><h4>Tittle goes here</h4></a>
-            <h6>$12.50</h6>
-            <p>Lorem ipsume dolor sit amet, adipisicing elite. Itaque, corporis nulla aspernatur.</p>
-            <ul class="stars">
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-            </ul>
-            <span>Reviews (16)</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="product-item">
-          <a href="#"><img src="../landingpage/assets/images/product_06.jpg" alt=""></a>
-          <div class="down-content">
-            <a href="#"><h4>Tittle goes here</h4></a>
-            <h6>$22.50</h6>
-            <p>Lorem ipsume dolor sit amet, adipisicing elite. Itaque, corporis nulla aspernatur.</p>
-            <ul class="stars">
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-            </ul>
-            <span>Reviews (32)</span>
-          </div>
-        </div>
-      </div>
+      <div class="col-md-12">
+        <div class="filters-content">
+            <div class="row grid">
+              @foreach ($services as $service)
+                        <div class="col-lg-4 col-md-4 all des">
+                     
+                            <div class="product-item">
+                               
+                                <a href="#"><img src="/servicesimages/{{$service->image}}" alt="" style="width: 100%; height: 200px;bservice-radius: 10px;"></a>
+                                <div class="down-content">
+                                    <input type="hidden" class="service-id" id="service_id" value="{{ $service->id }}">
+                                    <a href="#">
+                                        <h4 class="">{{$service->type_services}}</h4>
+                                    </a>
+                                    <input type="hidden" class="serviceImage" id="service_id" value="{{ $service->image }}">
+                                    <input type="hidden" class="serviceType" id="service_id" value="{{ $service->type_services }}">
+                                    <a href="#">
+                                      <h4 class="">Services Category:<p>{{$service->category}}</p></h4>
+                                  </a>
+                                 
+                                  <div class="" style="gap:5px;"><h6>Php {{number_format($service->unit_price,2)}}</h6></div>
+                                  
+                                    <h4>Description:<p>{{$service->description}}</p></h4>
+                                    <h4>Status:<p>{{$service->status}}</p></h4>
+                                   {{-- @if($service->status == 'Not available')
+                                    <button class="btn btn-primary add-to-cart" disabled>Add Cart (Not Available)</button>
+                                @else
+                                    <but ton class="btn btn-primary add-to-cart" data-service-id="{{ $service->id }}" data-service-type="{{ $service->type_services }}"data-service-image="{{ $service->image }}" onclick="openModal('{{ $service->category }}', '{{ $service->unit_price }}', '{{ $service->id }}', '{{ $service->type_services }}', '{{ $service->image }}')" data-target="#cartModal">Add Cart</button>
+                                @endif --}}
+{{-- 
+                                                                      <!-- Add Cart button with onclick event -->
+                                                                    <button class="btn btn-primary add-to-cart" data-service-id="{{ $service->id }}" data-service-type="{{ $service->type_services }}" onclick="openModal('{{ $service->category }}', '{{ $service->unit_price }}', '{{ $service->id }}', '{{ $service->type_services }}', '{{ $service->image }}')" data-target="#cartModal">Add Cart</button> --}}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            @endforeach
+                                               
+                                                    
+                                 
+                                                 <!-- Modal -->
+<div id="cartModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="type_services">Add to Cart</h2>
+        <p id="category"></p>
+
+        <!-- Form for color select, quantity input, and other color input -->
+        <form action{{ url('Servicescart') }} method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="form-row">
+                <div class="col-md-4 form-group">
+                    <label for="typeSelect">Type:</label>
+                    <input type="text" id="typeSelect" name="type" class="form-control" value="services" readonly>
+                     
+                </div>
+
+                <!-- Color Select Column -->
+                <div class="col-md-4 form-group">
+                    <label for="colorSelect">Select Color:</label>
+                    <select id="colorSelect" name="color" onchange="checkColor()" class="form-control">
+                        <option value="red">Red</option>
+                        <option value="blue">Blue</option>
+                        <option value="green">Green</option>
+                        <option value="other">Other</option>
+                        <!-- Add more color options as needed -->
+                    </select>
+                </div>
+                <!-- Color Select Column -->
+                <div class="col-md-4 form-group">
+                    <label for="sizeSelect">Size:</label>
+                    <select id="sizeSelect" name="sizeof" onchange="checkSize()" class="form-control">
+                        <option value="Long">Long</option>
+                        <option value="Short">Short</option>
+                        <option value="A4">A4</option>
+                        <option value="add">Add</option>
+                        <!-- Add more color options as needed -->
+                    </select>
+                </div>
+
+                <!-- Quantity Input Column -->
+                <div class="col-md-4 form-group">
+                    <label for="quantityInput">Quantity:</label>
+                    <input type="number" id="quantityInput" name="quantity" value="1" min="1" class="form-control" onchange="calculateTotal()">
+                </div>
+
+                <div class="col-md-4 form-group">
+                    <label for="totalPrice">Total Price:</label>
+                    <input type="text" id="totalPrice" name="total_amount" class="form-control" readonly>
+                </div>
+                <input type="hidden" id="serviceIdInput" name="service_category_id" class="form-control" id="serviceId">
+                <!-- Hidden input fields -->
+                <input type="hidden" id="productNameInput" name="services" id="category">
+                <input type="hidden" id="productPriceInput" name="unit_price">
+                <input type="hidden" id="serviceIdInput" name="service_category_id" >
+                <input type="hidden" name="users_id">
+                <input type="hidden" id="userIdInput" >
+                <input type="hidden" id="typeImagesInput" name="image" id="typeImage">
+                <input type="hidden" id="typeServicesInput" name="type_services" id="typeServices">
+
+            </div>
+
+            <!-- Other Color Input -->
+            <div class="form-group" id="otherColorInputContainer" style="display: none;">
+                <label for="otherColorInput">Add Color:</label>
+                <input type="text" id="otherColorInput" name="other_color" class="form-control" placeholder="Enter Color">
+            </div>
+             <!-- Other size Input -->
+             <div class="form-group" id="AddnputContainer" style="display: none;">
+                <label for="AddinputContainer">Add Size:</label>
+                <input type="text" id="AddinputContainer" name="new_size" class="form-control" placeholder="Enter Size">
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Add to Cart</button>
+        </form>
     </div>
-  </div>
 </div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+
+function openModal(category, productPrice, userId, type_services) {
+    var serviceId = $(event.target).closest('.product-item').find('.service-id').val();
+
+    document.getElementById("category").textContent = category;
+    document.getElementById("productNameInput").value = category;
+    document.getElementById("productPriceInput").value = productPrice;
+    document.getElementById("serviceIdInput").value = serviceId; // Update the hidden input field with the service ID
+    document.getElementById("userIdInput").value = userId;
+   // Set the selected type_services in the dropdown
+    document.getElementById("type_services").textContent = type_services; // Update the modal header with type_services
+    document.getElementById("typeServicesInput").value = type_services;
+    document.getElementById("cartModal").style.display = "block";
+    calculateTotal(); // Calculate total price initially
+}
+
+
+
+function closeModal() {
+    document.getElementById("cartModal").style.display = "none";
+}
+
+
+    function checkColor() {
+        var colorSelect = document.getElementById("colorSelect");
+        var otherColorInputContainer = document.getElementById("otherColorInputContainer");
+        if (colorSelect.value === "other") {
+            otherColorInputContainer.style.display = "block";
+        } else {
+            otherColorInputContainer.style.display = "none";
+        }
+    }
+    function checkSize() {
+        var sizeSelect = document.getElementById("sizeSelect");
+        var otherColorInputContainer = document.getElementById("AddnputContainer");
+        if (sizeSelect.value === "add") {
+           AddnputContainer.style.display = "block";
+        } else {
+           AddnputContainer.style.display = "none";
+        }
+    }
+    function calculateTotal() {
+        // Get the quantity input value
+        var quantity = parseInt(document.getElementById("quantityInput").value);
+
+        // Get the unit price from the hidden input field or any other source
+        var unitPrice = parseFloat(document.getElementById("productPriceInput").value);
+
+        // Calculate the total price by multiplying quantity and unit price
+        var totalPrice = quantity * unitPrice;
+
+        // Display the total price in the "Total Price" input field
+        document.getElementById("totalPrice").value = totalPrice.toFixed(2); // Ensure to format the total price as needed
+    }
+
+    
+</script>
+
+                                        
+                                    <!-- Add your JavaScript files here -->
+                                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                                    <script>
+                                        // Function to fetch and display notifications
+                                        function fetchNotifications() {
+                                            // Simulate fetching notifications from the server
+                                            // Replace this with actual AJAX call to fetch notifications
+                                            const notifications = [
+                                                { title: "New Order Received", time: "30 min ago" },
+                                                { title: "Server Limit Reached!", time: "1 hr ago" },
+                                                { title: "New customer registered", time: "2 sec ago" }
+                                                // Add more notifications as needed
+                                            ];
+                                    
+                                            // Clear existing notifications
+                                            $("#notificationDropdownMenu").empty();
+                                    
+                                            // Update notification count
+                                            $("#notificationCount").text(notifications.length);
+                                    
+                                            // Populate notification items
+                                            notifications.forEach(notification => {
+                                                $("#notificationDropdownMenu").append(`
+                                                    <a href="#" class="dropdown-item d-flex align-items-center py-2">
+                                                        <div class="wd-30 ht-30 d-flex align-items-center justify-content-center bg-primary rounded-circle me-3">
+                                                            <i class="far fa-bell"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1 me-2">
+                                                            <p>${notification.title}</p>
+                                                            <p class="tx-12 text-muted">${notification.time}</p>
+                                                        </div>
+                                                    </a>
+                                                `);
+                                            });
+                                        }
+                                    
+                                        // Function to mark all notifications as read
+                                        function markAllNotificationsAsRead() {
+                                            // Perform actions to mark notifications as read
+                                            // This function can be called when "Clear all" is clicked
+                                            $("#notificationDropdownMenu").empty();
+                                            $("#notificationCount").text("0");
+                                        }
+                                    
+                                        // Fetch notifications when document is ready
+                                        $(document).ready(function() {
+                                            fetchNotifications();
+                                        });
+                                    </script>
+                                    <script>
+                                        // Function to retrieve the service ID when the "Add Cart" button is clicked
+                                        document.querySelectorAll('.add-to-cart').forEach(button => {
+                                            button.addEventListener('click', function() {
+                                                // Retrieve the service ID from the data attribute of the button
+                                                const serviceId = this.getAttribute('data-service-id');
+                                                
+                                                // Set the service ID in the hidden input field of the modal
+                                                document.getElementById('serviceIdInput').value = serviceId;
+                                                
+                                                // Display the service ID in the modal body
+                                                document.getElementById('serviceId').textContent = serviceId;
+                                            });
+                                        });
+                                        
+                                        // Function to add the service to the cart
+                                        function addToCart() {
+                                            // Retrieve the service ID from the hidden input field in the modal
+                                            const serviceId = document.getElementById('serviceIdInput').value;
+                                            
+                                            // Perform further actions, such as adding the service to the cart
+                                            console.log('Service ID:', serviceId);
+                                            
+                                            // You can add more logic here to add the service to the cart
+                                        }
+                                    </script>
+                                    
+<script>
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', function() {
+            const serviceId = this.getAttribute('data-service-id');
+            const typeServices = this.getAttribute('data-service-type');
+            const typeImage = this.getAttribute('data-service-image');
+            document.getElementById('serviceIdInput').value = serviceId;
+            document.getElementById('typeServicesInput').value = typeServices;
+            document.getElementById('typeImagesInput').value = typeImage;
+            document.getElementById('serviceId').textContent = serviceId;
+        });
+    });
+
+    function addToCart() {
+        const serviceId = document.getElementById('serviceIdInput').value;
+        const typeServices = document.getElementById('typeServicesInput').value;
+        const typeImage = document.getElementById('typeImagesInput').value;
+        console.log('Service ID:', serviceId);
+        console.log('Type Services:', typeServices);
+        console.log('Type Image:', typeImage );
+        // Add logic to add the service to the cart
+    }
+</script>
+
+                              
+                          <!-- Add your JavaScript files here -->
+                          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                          <script>
+                              // Function to fetch and display notifications
+                              function fetchNotifications() {
+                                  // Simulate fetching notifications from the server
+                                  // Replace this with actual AJAX call to fetch notifications
+                                  const notifications = [
+                                      { title: "New Order Received", time: "30 min ago" },
+                                      { title: "Server Limit Reached!", time: "1 hr ago" },
+                                      { title: "New customer registered", time: "2 sec ago" }
+                                      // Add more notifications as needed
+                                  ];
+                          
+                                  // Clear existing notifications
+                                  $("#notificationDropdownMenu").empty();
+                          
+                                  // Update notification count
+                                  $("#notificationCount").text(notifications.length);
+                          
+                                  // Populate notification items
+                                  notifications.forEach(notification => {
+                                      $("#notificationDropdownMenu").append(`
+                                          <a href="#" class="dropdown-item d-flex align-items-center py-2">
+                                              <div class="wd-30 ht-30 d-flex align-items-center justify-content-center bg-primary rounded-circle me-3">
+                                                  <i class="far fa-bell"></i>
+                                              </div>
+                                              <div class="flex-grow-1 me-2">
+                                                  <p>${notification.title}</p>
+                                                  <p class="tx-12 text-muted">${notification.time}</p>
+                                              </div>
+                                          </a>
+                                      `);
+                                  });
+                              }
+                          
+                              // Function to mark all notifications as read
+                              function markAllNotificationsAsRead() {
+                                  // Perform actions to mark notifications as read
+                                  // This function can be called when "Clear all" is clicked
+                                  $("#notificationDropdownMenu").empty();
+                                  $("#notificationCount").text("0");
+                              }
+                          
+                              // Fetch notifications when document is ready
+                              $(document).ready(function() {
+                                  fetchNotifications();
+                              });
+                          </script>
+                          <script>
+                              // Function to retrieve the service ID when the "Add Cart" button is clicked
+                              document.querySelectorAll('.add-to-cart').forEach(button => {
+                                  button.addEventListener('click', function() {
+                                      // Retrieve the service ID from the data attribute of the button
+                                      const serviceId = this.getAttribute('data-service-id');
+                                      
+                                      // Set the service ID in the hidden input field of the modal
+                                      document.getElementById('serviceIdInput').value = serviceId;
+                                      
+                                      // Display the service ID in the modal body
+                                      document.getElementById('serviceId').textContent = serviceId;
+                                  });
+                              });
+                              
+                              // Function to add the service to the cart
+                              function addToCart() {
+                                  // Retrieve the service ID from the hidden input field in the modal
+                                  const serviceId = document.getElementById('serviceIdInput').value;
+                                  
+                                  // Perform further actions, such as adding the service to the cart
+                                  console.log('Service ID:', serviceId);
+                                  
+                                  // You can add more logic here to add the service to the cart
+                              }
+                          </script>
+                          
+<script>
+document.querySelectorAll('.add-to-cart').forEach(button => {
+button.addEventListener('click', function() {
+  const serviceId = this.getAttribute('data-service-id');
+  const typeServices = this.getAttribute('data-service-type');
+  const typeImage = this.getAttribute('data-service-image');
+  document.getElementById('serviceIdInput').value = serviceId;
+  document.getElementById('typeServicesInput').value = typeServices;
+  document.getElementById('typeImagesInput').value = typeImage;
+  document.getElementById('serviceId').textContent = serviceId;
+});
+});
+
+function addToCart() {
+const serviceId = document.getElementById('serviceIdInput').value;
+const typeServices = document.getElementById('typeServicesInput').value;
+const typeImage = document.getElementById('typeImagesInput').value;
+console.log('Service ID:', serviceId);
+console.log('Type Services:', typeServices);
+console.log('Type Image:', typeImage );
+// Add logic to add the service to the cart
+}
+</script>
+
+{{-- end services list --}}
 
 {{-- end services list --}}
     <div class="best-features">

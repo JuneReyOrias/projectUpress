@@ -30,6 +30,7 @@
                         <a class="nav-link  active" href="{{route('customer.addcart.cart_order')}}">
                             <i class="fas fa-shopping-cart"></i>
                             <span class="badge bg-primary">{{$no_cart}}</span>
+                           
                         </a>
                     </li>
                     <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Orders">
@@ -143,7 +144,7 @@
                 <table id="shoppingCart" class="table table-condensed table-responsive">
                     <thead>
                         <tr>
-                            <th style="width:20%">Product</th>
+                            <th style="width:20%">Product Image</th>
                             <th style="width:12%">Item-Name</th>
                             <th style="width:12%">Type</th>
                             <th style="width:12%">Color</th>
@@ -156,7 +157,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            @foreach ( $cart as $carts )
+                            @foreach ( $cart->where('type','product') as $carts )
                                 
                        
                             <td data-th="Product">
@@ -207,10 +208,80 @@
                                
                     </tbody>
                 </table>
+                <br>
+                <table id="shoppingCart" class="table table-condensed table-responsive">
+                    <thead>
+                        <tr>
+                            <th style="width:20%">Services Image</th>
+                            <th style="width:12%">Category</th>
+                            <th style="width:12%">Type_services</th>
+                            <th style="width:12%">Color</th>
+                            <th style="width:12%">Size</th>
+                            <th style="width:12%">Quantity</th>
+                            <th style="width:12%">Unit Price</th>
+                            <th style="width:12%">Total Amount</th>
+                            <th style="width:12%">action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            @foreach ( $cart->where('type','services') as $services )
+                                
+                       
+                            <td data-th="Product">
+                                <div class="row">
+                                   
+                                    <div class="col-md-9 text-left mt-sm-2">
+                                        <img src="/servicesimages/{{ $services->image}}" alt="" class="img-fluid d-none d-md-block rounded mb-2 shadow ">
+                                    </div> 
+                                </div>
+                            </td>
+                            <td data-th="Price">{{ $services->services}}</td>
+                            <td data-th="Price">{{ $services->type_services}}</td>
+                            <td data-th="Price">{{ $services->color}}</td>
+                            <td data-th="Price">{{ $services->sizeof}}</td>
+                            <td data-th="Quantity">{{ $services->quantity}}
+                                {{-- <input type="number" class="form-control form-control-lg text-center" value="{{ $services->quantity}}"> --}}
+                            </td>
+                            <td data-th="Price">{{number_format( $services->unit_price,2)}}</td>
+                            <td data-th="Price">{{number_format( $services->total_amount,2)}}</td>
+                           
+                            <td>
+                                <div class="btn-group" role="group" aria-label="Actions">
+                                   
+
+
+
+
+                    <!-- Edit Button -->
+                    <a href="{{route('customer.addcart.edit_cart_services',$services->id)}}" title="Edit">
+                        <button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                    </a>
+
+
+                                    <span class="mx-1"></span> <!-- Add space between icons -->
+                                    <form action="{{route('customer.addcart.delete',$services->id)}}" method="post" accept-charset="UTF-8" style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Delete" onclick="return confirm(&quot;Confirm delete?&quot;)">
+                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                            
+                            
+                        </tr>
+                        <tr>
+                            @endforeach
+                               
+                    </tbody>
+                </table>
                 <div class="card-footers border-0 px-4 py-5"
                 >
                 <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
-                  : <span class="h2 mb-0 ms-2">{{ number_format($total, 2) }}</span></h5>
+                  : <span class="h2 mb-0 ms-2">Php {{ number_format($total, 2) }}</span></h5>
               </div>
                 <div class="row mt-4 d-flex align-items-center justify-content-end">
                     <div class="col-sm-6 order-md-1 text-right">

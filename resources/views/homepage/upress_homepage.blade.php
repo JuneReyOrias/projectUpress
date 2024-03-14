@@ -40,14 +40,14 @@
     <header class="">
       <nav class="navbar navbar-expand-lg">
         <div class="container">
-          <a class="navbar-brand" href="index.html"><h2>WMSU <em>UPRESS</em></h2></a>
+          <a class="navbar-brand" href="{{route('homepage.upress_homepage')}}"><h2>WMSU <em>UPRESS</em></h2></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
               <li class="nav-item active">
-                <a class="nav-link" href="landingpage/index.html">Home
+                <a class="nav-link" href="{{route('homepage.upress_homepage')}}">Home
                   <span class="sr-only">(current)</span>
                 </a>
               </li> 
@@ -66,9 +66,9 @@
               <li class="nav-item">
                 <a class="nav-link" href={{url('/login')}}>Login</a>
               </li>
-              <li class="nav-item">
+              {{-- <li class="nav-item">
                 <a class="nav-link" href="{{route('register')}}">Register</a>
-              </li>
+              </li> --}}
             </ul>
           </div>
         </div>
@@ -79,24 +79,24 @@
     <!-- Banner Starts Here -->
     <div class="banner header-text">
       <div class="owl-banner owl-carousel">
-        <div class="banner-item-01" style="background-image: url('../landingpage/assets/images/slide_01.jpg');" >
+        <div class="banner-item-01" style="background-image: url('../landingpage/assets/images/wmsu.jpg');" >
        
           <div class="text-content">
-            <h4>Best Offer</h4>
-            <h2>New Arrivals On Sale</h2>
+            <h4>WMSU</h4>
+            <h2>UPRESS</h2>
           </div>
         </div>
         <div class="banner-item-02" style="background-image: url('../landingpage/assets/images/slide_02.jpg');">
 
           <div class="text-content">
-            <h4>Flash Deals</h4>
-            <h2>Get your best products</h2>
+            <h4>UPRESS</h4>
+            <h2>Products</h2>
           </div>
         </div>
         <div class="banner-item-03" style="background-image: url('../landingpage/assets/images/slide_03.jpg');">
           <div class="text-content">
-            <h4>Last Minute</h4>
-            <h2>Grab last minute deals</h2>
+            <h4>UPRESS</h4>
+            <h2>SERVICES</h2>
           </div>
         </div>
       </div>

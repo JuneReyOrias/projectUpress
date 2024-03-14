@@ -22,8 +22,8 @@ public function Newstore(ServiceCategoryRequest $request)
 {
     try {
         // Create a new Product instance
-        $prefix = "19051822000"; 
-        $id=IdGenerator::generate(['table'=> 'service_category','field'=> 'id','length'=>7,'prefix'=>$prefix]);
+        // $prefix = "19051822000"; 
+        // $id=IdGenerator::generate(['table'=> 'service_category','field'=> 'id','length'=>7,'prefix'=>$prefix]);
 
 
 
@@ -53,7 +53,7 @@ public function Newstore(ServiceCategoryRequest $request)
         }
 
         // Assign other fields from the request to the ServiceCategory instance
-        $serviceCategory->id = $id;
+        // $serviceCategory->id = $id;
         $serviceCategory->serv_code = $request->serv_code;
         $serviceCategory->category = $request->category;
         $serviceCategory->description = $request->description;

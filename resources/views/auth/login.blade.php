@@ -101,7 +101,7 @@ License: For each use you must have a valid license purchased only from above li
                             Login
                           </button>
                         </div>
-                        <a href="{{route('register')}}" class="d-block mt-3 text-muted">Create Account? Sign up</a>
+                        <a href="{{route('homepage.upress_homepage')}}" class="d-block mt-3 text-muted">Homepage</a>
                       </form>
                   </div>
                 </div>
