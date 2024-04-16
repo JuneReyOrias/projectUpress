@@ -29,9 +29,40 @@ use App\Models\ServiceParameter;
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
-// add to cartt
-Route::get('/cart',[CustomerController::class, 'ViewCart'])->name('cart.addcart');
 
+
+// view customers all orders
+Route::get('/customer-view-all-orders/{trackNo}', [CustomerController::class, 'CheckAllorders'])->name('customer.orderlist.all_orders_view');
+
+// viewl all order
+Route::get('/admin-view-allCustomers-orders/{trackNo}',[AdminController::class,'AllCustomersOrd'])->name('admin.customerOrders.view_allorders');
+
+
+// TrackCustomer admin.customerOrders.edit_trackorders
+Route::get('/admin-view-track-customerOrders',[AdminController::class,'TrackCustomers'])->name('admin.customerOrders.TrackCustomerOrders');
+Route::get('/admin-view-check-customerOrders/{trackNo}',[AdminController::class,'CheckTrackordrs'])->name('admin.customerOrders.check_orders');
+Route::get('/admin-view-update-customerOrders/{trackNo}',[AdminController::class,'editTrackordrs'])->name('admin.customerOrders.edit_trackorders');
+// Route::post('/admin-view-update-customerOrders/{id}',[AdminController::class,'ConfirmsOrdrs']);
+// Route::get('/admin-view-edit-Orders/{viewdata}',[AdminController::class,'viewtrackers'])->name('admin.customerOrders.change');
+// Route::post('/admin-view-edit-Orders/{viewdata}',[AdminController::class,'neworders']);
+
+
+// add cart
+Route::get('/cart',[CustomerController::class, 'ViewCart'])->name('cart.addcart');
+// admiin addnew stock out
+Route::get('/admin-add-stock-out',[AdminController::class,'AddStockOut'])->name('admin.stockout.newstokin');
+
+// admin add new stock in
+Route::get('/admin-add-stock-in',[AdminController::class,'AddStockIn'])->name('admin.stock-in.add_stock_in_out');
+Route::post('/admin-add-stock-in',[AdminController::class,'Stockin']);
+Route::get('/admin-update-stock-in/{editstock}',[AdminController::class,'EditStockInOut'])->name('admin.stock-in.edit_stockIn_out');
+Route::post('/admin-update-stock-in/{editstock}',[AdminController::class,'StoreStockout']);
+// admin add new color
+Route::get('/admin-add-color',[AdminController::class,'AddColor'])->name('admin.color.add_color');
+Route::post('/admin-add-color',[AdminController::class,'AddColors']);
+// add new sizes access by admin
+Route::get('/admin-add-sizes',[AdminController::class,'NewSize'])->name('admin.sizes.add_size_new');
+Route::post('/admin-add-sizes',[AdminController::class,'AddNewSize']);
 
 // add unique code
 Route::get('/add-unique-code',[AdminController::class,'UniqueCode'])->name('code.add_codename');
@@ -174,7 +205,7 @@ Route::delete('/admin-delete-accounts/{accounts}',[AdminController::class,'Delet
 
 // orders view by admin 
 Route::get('/admin-view-customers-orders',[AdminController::class, 'customersOrders'])->name('admin.customerOrders.view_orders');
-Route::get('/admin-check-customers-orders/{ordersEdit}',[AdminController::class,'ordersAdmin'])->name('admin.customerOrders.edit_orders');
+Route::get('/admin-check-customers-orders/{ordersEdit}',[AdminController::class,'ordersAdmin'])->name('admin.customerOrders.change');
 Route::post('/admin-check-customers-orders/{ordersEdit}',[AdminController::class,'ordersCustoUpdate']);
 
 

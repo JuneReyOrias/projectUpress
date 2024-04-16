@@ -26,16 +26,7 @@
 
   <body>
 
-    <!-- ***** Preloader Start ***** -->
-    <div id="preloader">
-        <div class="jumper">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </div>  
-    <!-- ***** Preloader End ***** -->
-
+   
     <!-- Header -->
     <header class="">
       <nav class="navbar navbar-expand-lg">
@@ -265,7 +256,7 @@ document.getElementById("totalPrice").value = totalPrice.toFixed(2); // Ensure t
 
                 <div class="col-lg-4 col-md-4 all des">
                     <div class="product-item">
-                        <a href="#"><img src="/productimages/{{$service->image}}" alt="" style="width: 100%; height: 200px;bservice-radius: 10px;"></a>
+                        <a href="#"><img src="/servicesimages/{{$service->image}}" alt="" style="width: 100%; height: 200px;bservice-radius: 10px;"></a>
                         <div class="down-content">
                             <a href="#">
                                 <h4 class="">{{$service->category}}</h4>

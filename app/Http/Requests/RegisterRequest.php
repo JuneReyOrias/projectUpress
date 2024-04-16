@@ -70,11 +70,11 @@ class RegisterRequest extends FormRequest
                 'string',
                 'max:50',
             ],
-            'cust_code'=>[
-                'required',
-                'string',
-                'max:50',
-            ],
+            // 'cust_code'=>[
+            //     'required',
+            //     'string',
+            //     'max:50',
+            // ],
             'role'=>[
                 'required',
                 'string',

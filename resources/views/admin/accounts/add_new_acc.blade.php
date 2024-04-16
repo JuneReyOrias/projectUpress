@@ -142,13 +142,13 @@
                             
                             </select>
                           </div>
-                        <div class="input-box">
+                        {{-- <div class="input-box">
                           <span class="details">UsersCode</span>
                           <input type="text" name="cust_code" class="form-control @error('cust_code') is-invalid @enderror" placeholder="Enter users code" value="{{ old('cust_code') }}">
                           @error('cust_code')
                           <div class="invalid-feedback">{{ $message }}</div>
                       @enderror
-                        </div>
+                        </div> --}}
                         {{-- <div class="input-box">
                           <span class="details">Product Image</span>
                           <div class="input-group">
@@ -180,48 +180,7 @@
   
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  {{-- <script>
-   $(document).ready(function() {
-    var departments = {
-        'CLA': ['Bs Accountancy ','BS Econaomics','BS Psychology','Barsilyer ng Sining Sa Filipino' 'AB Broadcasting ', 'BAELS','AB Journalism', 'AB Political Science','BA History'],
-        'CN': ['Nursing'],
-        'CTE': ['BSED', 'BEED',],
-        'CHE': ['HE'],
-        'COE': ['Civil Eng', 'Mechanical Eng', 'Electrical E','Environmental Eng','Geodetic Eng','Industrial Eng','Sanitary Eng','Computer Eng','Agriculture Eng'],
-        'COA':['Architecture']
-        'CAIS':['Asian Studies','Islamic Studies'],
-        'CSM':['BS Chemistry','BS Biology','BS Math','BS Statistics', 'BS Physics'],
-        'CCJE':['BSCRIM'],
-        'CAIS':['Asian Studies','Islamic Studies'],
-        'UPRESS': ['Admin', 'Staff'],
-    };
 
-    $('#college').change(function() {
-        var selectedCollege = $(this).val();
-        var selectedDepartment = departments[selectedCollege];
-
-        $('#department').empty().append('<option selected disabled>Select</option>');
-        $.each(selectedDepartment, function(key, value) {
-            $('#department').append($("<option></option>")
-                .attr("value", value).text(value));
-        });
-
-        $('#departmentDropdown').show();
-    });
-
-    // Show additional college field if "Add New" is selected
-    $('#college').change(function() {
-        var selectedCollege = $(this).val();
-        if (selectedCollege === 'add_new') {
-            $('#additionalCollegeField').show();
-            $('#departmentDropdown').hide();
-        } else {
-            $('#additionalCollegeField').hide();
-        }
-    });
-});
-
-</script> --}}
 <script>
   $(document).ready(function() {
    var departments = {

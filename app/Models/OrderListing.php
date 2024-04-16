@@ -52,4 +52,17 @@ protected static function boot()
             $order->uuid = (string) Str::uuid();
         });
     }
+    public function trackOrders()
+    {
+        return $this->hasMany(TrackOrders::class, 'order_listing_id');
+    }
+
+    public function usersAcc()
+    {
+        return $this->belongsTo(User::class, 'users_id');
+    }
+    public function trackcustomer()
+{
+    return $this->hasMany(TrackOrders::class, 'order_listing_id');
+}
 }

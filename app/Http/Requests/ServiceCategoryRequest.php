@@ -58,11 +58,7 @@ class ServiceCategoryRequest extends FormRequest
                 'string',
                 'max:50',
             ],
-            'serv_code'=>[
-                'required',
-                'string',
-                'max:50',
-            ],
+      
            
             
            
@@ -79,7 +75,7 @@ class ServiceCategoryRequest extends FormRequest
             'unit.required'=>'Please input unit',
             'color.required'=>'Please input color',
             'status.required'=>'Please select product status',
-            'serv_code.required'=>'Please input services code',
+       
             
        ];
     

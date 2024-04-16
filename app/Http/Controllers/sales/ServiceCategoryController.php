@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ServiceCategoryRequest;
 use App\Models\ServiceCategory;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Http\Request;
 
 class ServiceCategoryController extends Controller
 {
     public function ServicesCat(){
-        $servicescat= ServiceCategory::all();
+        $servicescat= ServiceCategory::orderBy('id','desc')->paginate(10);
         
         return view('servicescat.add_services',compact('servicescat'));
     }
@@ -29,7 +30,7 @@ public function Newstore(ServiceCategoryRequest $request)
 
 
         // Validate the request data using the ServiceCategoryRequest class
-        $data = $request->validated(); // This line validates the request data using the rules defined in ServiceCategoryRequest class
+        // $data = $request->validated(); // This line validates the request data using the rules defined in ServiceCategoryRequest class
 
         // Create a new ServiceCategory instance
         $serviceCategory = new ServiceCategory; // Renamed the variable to make it clearer
@@ -54,18 +55,27 @@ public function Newstore(ServiceCategoryRequest $request)
 
         // Assign other fields from the request to the ServiceCategory instance
         // $serviceCategory->id = $id;
-        $serviceCategory->serv_code = $request->serv_code;
-        $serviceCategory->category = $request->category;
+    
+        $serviceCategory->category = $request->category=== 'Add_new' ? $request->additional_info: $request->category;
         $serviceCategory->description = $request->description;
-        $serviceCategory->type_services = $request->type_services;
-        $serviceCategory->size = $request->size;
+        $serviceCategory->type_services = $request->type_services === 'add_new_printing'
+        ? $request->printing_info
+        : ($request->type_services === 'add_new_layout'
+            ? $request->layout_info
+            : ($request->type_services === 'add_new_Binding'
+                ? $request->binding_info
+                : ($request->type_services === 'add_new_Lamination'
+                    ? $request->lamination_info
+                    : $request->type_services)));
+    
+        $serviceCategory->size = $request->size=== 'Add_new_size' ? $request->size_info: $request->size;
         $serviceCategory->unit = $request->unit;
-        $serviceCategory->color = $request->color;
+        $serviceCategory->color = $request->color=== 'add_new_colors' ? $request->color_info: $request->color;
         $serviceCategory->unit_price = $request->unit_price;
         $serviceCategory->status = $request->status;
 
         // Debugging: Dump the $serviceCategory instance to see its values
-        // dd($serviceCategory);
+        dd($serviceCategory);
 
         // Save the ServiceCategory data to the database
         $serviceCategory->save();
@@ -86,27 +96,61 @@ public function serviceshow($id){
 
 }
 
-//update the serviceCategory content
-public function updateservices(Request $request,$id){
-    try {
-        $data= ServiceCategory::find($id);
+            //update the serviceCategory content
+            public function updateservices(Request $request,$id){
+                try {
+                    $serviceCategory= ServiceCategory::find($id);
+        // Check if a file is present in the request and if it's valid
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            // Retrieve the image file from the request
+            $image = $request->file('image');
 
-        // Assign other fields from the request to the Product data
-        $data->category = $request->category;
-        $data->description = $request->description;
-        
+            // Generate a unique image name using current timestamp and file extension
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+
+            // Move the uploaded image to the 'servicesimages' directory with the generated name
+            $image->move('servicesimages', $imageName);
+
+            // Set the image name in the ServiceCategory instance
+            $serviceCategory->image = $imageName;
+        } 
+
+        // Assign other fields from the request to the ServiceCategory instance
+        // $serviceCategory->id = $id;
     
-        // Save the Product data to the database
-        $data->save();
-            // Redirect back after processing
-            return redirect()->route('servicescat.add_services')->with('message', 'Servicess updated successfully');
-        
-    } catch (\Exception $e) {
-        dd($e);
-        // Handle any exceptions and redirect back with error message
-        return redirect()->back()->with('error', 'Error updating product: ' . $e->getMessage());
-    }
-}
+        $serviceCategory->category = $request->category=== 'Add_new' ? $request->additional_info: $request->category;
+        $serviceCategory->description = $request->description;
+        $serviceCategory->type_services = $request->type_services === 'add_new_printing'
+        ? $request->printing_info
+        : ($request->type_services === 'add_new_layout'
+            ? $request->layout_info
+            : ($request->type_services === 'add_new_Binding'
+                ? $request->binding_info
+                : ($request->type_services === 'add_new_Lamination'
+                    ? $request->lamination_info
+                    : $request->type_services)));
+    
+        $serviceCategory->size = $request->size=== 'Add_new_size' ? $request->size_info: $request->size;
+        $serviceCategory->unit = $request->unit;
+        $serviceCategory->color = $request->color=== 'add_new_colors' ? $request->color_info: $request->color;
+        $serviceCategory->unit_price = $request->unit_price;
+        $serviceCategory->status = $request->status;
+
+        // Debugging: Dump the $serviceCategory instance to see its values
+        // dd($serviceCategory);
+
+        // Save the ServiceCategory data to the database
+        $serviceCategory->save();
+
+    // Redirect back after processing
+                        return redirect()->route('servicescat.add_services')->with('message', 'Servicess updated successfully');
+                    
+                } catch (\Exception $e) {
+                    dd($e);
+                    // Handle any exceptions and redirect back with error message
+                    return redirect()->back()->with('error', 'Error updating product: ' . $e->getMessage());
+                }
+            }
 
 public function servicesdelete($id){
     try {

@@ -283,18 +283,24 @@
                 <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
                   : <span class="h2 mb-0 ms-2">Php {{ number_format($total, 2) }}</span></h5>
               </div>
-                <div class="row mt-4 d-flex align-items-center justify-content-end">
-                    <div class="col-sm-6 order-md-1 text-right">
+              <div class="row mt-4 d-flex align-items-center justify-content-end">
+                <div class="col-sm-6 order-md-1 text-right">
+                    <!-- Check if the cart is empty -->
+                    @if($cart->isEmpty())
+                        <p>No orders have been placed yet.</p>
+                    @else
                         <!-- Checkout button -->
-                        <form id="checkoutForm" action="{{route('customer.orderlist.confirm_order')}}" method="GET">
+                        <form id="checkoutForm" action="{{ route('customer.orderlist.confirm_order') }}" method="GET">
                             @csrf <!-- Include CSRF token for Laravel -->
                             <!-- You can include hidden input fields here to pass additional data if needed -->
                             <!-- For example: -->
                             <!-- <input type="hidden" id="additionalData" name="additionalData" value="someValue"> -->
                             <button type="button" class="btn btn-primary mb-4 btn-lg pl-5 pr-5" onclick="prepareCheckout()">Checkout</button>
                         </form>
-                    </div>
+                    @endif
                 </div>
+            </div>
+            
                 
     </div>
 </div>

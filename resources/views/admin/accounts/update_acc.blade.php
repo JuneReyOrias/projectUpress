@@ -146,13 +146,13 @@
                             
                             </select>
                           </div>
-                        <div class="input-box">
+                        {{-- <div class="input-box">
                           <span class="details">UsersCode</span>
                           <input type="text" name="cust_code" class="form-control @error('cust_code') is-invalid @enderror"value="{{$accounts->cust_code}}" placeholder="Enter users code" value="{{ old('cust_code') }}">
                           @error('cust_code')
                           <div class="invalid-feedback">{{ $message }}</div>
                       @enderror
-                        </div>
+                        </div> --}}
                         {{-- <div class="input-box"> --}}
                           {{-- <span class="details">Product Image</span>
                           <div class="input-group">

@@ -204,7 +204,7 @@
 
                                 <div class="card-footer border-0 px-4 py-5"
                                   style="background-color: #D7DBDD; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-                                  <h4 class="d-flex align-items-center justify-content-end text-white text ">Total
+                                  <h4 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
                                     : <span class="">Php {{number_format($total,2)}}</span></h4>
                                 </div>
                                 <div class="row mt-4 d-flex justify-content-center">

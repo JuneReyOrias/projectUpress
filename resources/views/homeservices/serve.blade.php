@@ -13,13 +13,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="landingpage/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!--
 
-TemplateMo 546 Sixteen Clothing
-
-https://templatemo.com/tm-546-sixteen-clothing
-
--->
 
     <!-- Additional CSS Files -->
     <link rel="stylesheet" href="landingpage/assets/css/fontawesome.css">
@@ -30,15 +24,6 @@ https://templatemo.com/tm-546-sixteen-clothing
 
 <body>
 
-    <!-- ***** Preloader Start ***** -->
-    <div id="preloader">
-        <div class="jumper">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </div>
-    <!-- ***** Preloader End ***** -->
 
     <!-- Header -->
     <header class="">
@@ -152,7 +137,7 @@ https://templatemo.com/tm-546-sixteen-clothing
 
                         <div class="col-lg-4 col-md-4 all des">
                             <div class="product-item">
-                                <a href="#"><img src="/productimages/{{$service->image}}" alt="" style="width: 100%; height: 200px;bservice-radius: 10px;"></a>
+                                <a href="#"><img src="/servicesimages/{{$service->image}}" alt="" style="width: 100%; height: 200px;bservice-radius: 10px;"></a>
                                 <div class="down-content">
                                     <a href="#">
                                         <h4 class="">{{$service->category}}</h4>
@@ -164,7 +149,7 @@ https://templatemo.com/tm-546-sixteen-clothing
                                     <p>Status: {{$service->status}}</p>
                                     
                                     <!-- Add Cart button with onclick event -->
-                                    <button class="btn btn-primary" onclick="openModal('{{$service->product_name}}', '{{$service->unit_price}}', '{{$service->image}}')">Add Cart</button>
+                                    {{-- <button class="btn btn-primary" onclick="openModal('{{$service->product_name}}', '{{$service->unit_price}}', '{{$service->image}}')">Add Cart</button> --}}
                                 </div>
                             </div>
                         </div>

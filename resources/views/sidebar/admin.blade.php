@@ -19,6 +19,60 @@
           </a>
           <li class="nav-item nav-category">Components</li>
           <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#stockin" role="button" aria-expanded="false" aria-controls="uiComponents">
+              <i class="link-icon" data-feather="hard-drive"></i>
+              <span class="link-title">Stock</span>
+              <i class="link-arrow" data-feather="chevron-down"></i>
+            </a>
+            <div class="collapse" id="stockin">
+              <ul class="nav sub-menu">
+                <li class="nav-item">
+                  <a href="{{route('admin.stock-in.add_stock_in_out')}}" class="nav-link">Stocks</a>
+                </li>
+                
+               
+
+                
+              </ul>
+            </div>
+            
+          </li>
+         
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#sizes" role="button" aria-expanded="false" aria-controls="uiComponents">
+              <i class="link-icon" data-feather="layout"></i>
+              <span class="link-title">Sizes</span>
+              <i class="link-arrow" data-feather="chevron-down"></i>
+            </a>
+            <div class="collapse" id="sizes">
+              <ul class="nav sub-menu">
+                <li class="nav-item">
+                  <a href="{{route('admin.sizes.add_size_new')}}" class="nav-link">Add Sizes</a>
+                </li>
+               
+
+                
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#color" role="button" aria-expanded="false" aria-controls="uiComponents">
+              <i class="link-icon" data-feather="hexagon"></i>
+              <span class="link-title">Color</span>
+              <i class="link-arrow" data-feather="chevron-down"></i>
+            </a>
+            <div class="collapse" id="color">
+              <ul class="nav sub-menu">
+                <li class="nav-item">
+                  <a href="{{route('admin.color.add_color')}}" class="nav-link">Add Color</a>
+                </li>
+               
+
+                
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#uiComponents" role="button" aria-expanded="false" aria-controls="uiComponents">
               <i class="link-icon" data-feather="shopping-bag"></i>
               <span class="link-title">Products</span>
@@ -59,7 +113,7 @@
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#forms" role="button" aria-expanded="false" aria-controls="forms">
               <i class="link-icon" data-feather="shopping-cart"></i>
-              <span class="link-title">Orders</span> <span class="badge bg-primary"> 0</span>
+              <span class="link-title">Orders</span> {{--<span class="badge bg-primary"> 0</span>---}}
               <i class="link-arrow" data-feather="chevron-down"></i>
             </a>
             <div class="collapse" id="forms">
@@ -67,7 +121,9 @@
                 <li class="nav-item">
                   <a href="{{route('admin.customerOrders.view_orders')}}" class="nav-link">Customer Orders</a>
                 </li>
-              
+                <li class="nav-item">
+                  <a href="{{route('admin.customerOrders.TrackCustomerOrders')}}" class="nav-link">Track Customer Orders</a>
+                </li>
               </ul>
             </div>
           </li>
@@ -111,7 +167,7 @@
               </ul>
             </div>
           </li> --}}
-          <li class="nav-item">
+          {{-- <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#tables" role="button" aria-expanded="false" aria-controls="tables">
               <i class="link-icon" data-feather="book"></i>
               <span class="link-title">Note List</span>
@@ -125,7 +181,7 @@
               
               </ul>
             </div>
-          </li>
+          </li> --}}
           
           <li class="nav-item nav-category">Accounts</li>
           <li class="nav-item">

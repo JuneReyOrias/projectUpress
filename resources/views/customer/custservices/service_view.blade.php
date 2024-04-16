@@ -277,11 +277,11 @@
                     <label for="totalPrice">Total Price:</label>
                     <input type="text" id="totalPrice" name="total_amount" class="form-control" readonly>
                 </div>
-                <input type="hidden" id="serviceIdInput" name="service_category_id" class="form-control" id="serviceId">
+                <input type="text" id="serviceIdInput" name="service_category_id" class="form-control" id="serviceId">
                 <!-- Hidden input fields -->
                 <input type="hidden" id="productNameInput" name="services" id="category">
                 <input type="hidden" id="productPriceInput" name="unit_price">
-                <input type="hidden" id="serviceIdInput" name="service_category_id" >
+                {{-- <input type="text" id="serviceIdInput" name="service_category_id" id="service_id" > --}}
                 <input type="hidden" name="users_id">
                 <input type="hidden" id="userIdInput" >
                 <input type="hidden" id="typeImagesInput" name="image" id="typeImage">
@@ -308,7 +308,7 @@
 
 <script>
 
-function openModal(category, productPrice, userId, type_services) {
+function openModal(category, productPrice, userId, type_services,serviceId) {
     var serviceId = $(event.target).closest('.product-item').find('.service-id').val();
 
     document.getElementById("category").textContent = category;

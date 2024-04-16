@@ -1,7 +1,8 @@
 @extends('admin.dashb')
 
 @section('admin')
-
+@extends('layouts._footer-script')
+@extends('layouts._head')
 <div class="page-content">
     <div class="row">
         <div class="col-md-12 grid-margin">
@@ -16,71 +17,79 @@
                     @endif
                     
                   <h4 class="mb-3 mb-md-0">View Customer Orders</h4>
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    {{-- <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <a href="{{ route('admin.accounts.add_new_acc') }}" button type="submit" class="btn btn-success me-md-2">Add</button></a>
-                    </div>
+                    </div> --}}
                     <br>
                     <div>
                       
                         <div class="table-responsive tab" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); border-radius: 10px;">
-                            <table class="table table-info" style="background-color: #ffffff;">
+                            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
                                 <thead class="thead-light">
                                     <tr>
                                       <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">Orders Id</th>
-                                      <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">Users Id</th>
-                                      <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">Products Id</th>
-                                      <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">Services Id</th>
-                                      <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">ItemName</th>
-                                      <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">Type</th>
-                                      <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">ServicesName</th>
+                                      <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">Customer Name</th>
+                                      <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">Products Name</th>
+                                      <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">Services</th>
                                       <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">Type Services</th>
+                                      <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">Color</th>
+                                      <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">Sizes</th>
+                                      
                                       <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">unit Price</th>
                                       <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">Quantity</th>
                                    
                                       <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">Total Amount</th>
-                                      <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">Required Delivery Date</th>
+                                    
                                       <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">Order Status</th>
                                       <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">Order Date</th>
                                       <th style="padding:20px; font-weight: bold; background-color: #343a40; color: white;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($ordersCust as $orders)
+                                    {{-- @php
+                                    // Group orders by track number
+                                    $groupedOrders = $trackcustomer->groupBy('trackno');
+                                @endphp
+                                
+                                @foreach ($groupedOrders as $trackNo => $orders)
+                                    @php
+                                        // Get the first order associated with the track number
+                                        $orders = $orders->first();
+                                    @endphp --}}
+                                    @foreach ($trackcustomer as $orders)
                                     <tr class="table-light">
                                         <td>{{$orders->id}}</td>
-                                        <td>{{ $orders->cust_code.'-'.$orders->users_id}}</td>
-                                        <td>{{ $orders->product_id}}</td>
-                                        <td>{{ $orders->service_category_id}}</td>
-                                        <td>{{ $orders->item_name}}</td>
-                                        <td>{{ $orders->type}}</td>
-                                        <td>{{ $orders->services}}</td>
-                                        <td>{{ $orders->type_services }}</td>
-                                        <td>{{ $orders->unit_price}}</td>
-                                        <td>{{ $orders->quantity}}</td>
-                                        
-                                        <td>{{ $orders->total_amount}}</td>
-                                        <td>{{ $orders->required_date}}</td>
+                                        <td>{{ $orders->usersName->firstname.' '. $orders->usersName->lastname}}</td>
+                                        <td>{{ $orders->orderlisting->item_name}}</td>
+                                        <td>{{ $orders->orderlisting->services}}</td>
+                                        <td>{{ $orders->orderlisting->type_services}}</td>
+                                        <td>{{ $orders->orderlisting->color}}</td>
+                                        <td>{{ $orders->orderlisting->sizeof}}</td>
+                                       
+                                        <td>{{ $orders->orderlisting->quantity }}</td>
+                                        <td>{{ $orders->orderlisting->unit_price }}</td>
+                                        <td>{{ $orders->orderlisting->total_amount}}</td>
                                         <td>{{ $orders->order_status}}</td>
-                                        {{-- <td>
-                                            <img style="height:100px; width:100px;" src="/ordersimages/{{ $orders->image }}">
-                                        </td> --}}
                                         <td>{{ $orders->created_at->format('Y-m-d H:i:s') }}</td> 
+                                        
+                                      
+                                      
                                        
                                        
                                         
                                         <td>
-                                            <a href="{{ route('admin.customerOrders.edit_orders', $orders->id) }}" title="Edit">
+                                            <a href="{{ route('admin.customerOrders.change', $orders->id) }}" title="Edit">
                                                 <button class="btn btn-primary btn-sm">
                                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
                                                 </button>
                                             </a>
-                                            <form action="{{ route('admin.accounts.delete', $orders->id) }}" method="post" accept-charset="UTF-8" style="display:inline">
+                                            {{-- <form action="{{ route('admin.accounts.delete', $orders->id) }}" method="post" accept-charset="UTF-8" style="display:inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete" onclick="return confirm(&quot;Confirm delete?&quot;)">
                                                     <i class="fa fa-trash-o" aria-hidden="true"></i> Delete
                                                 </button>
-                                            </form>
+                                            </form> --}}
                                         </td>
                                     </tr>
                                     @endforeach
@@ -140,13 +149,13 @@
 
 <div class="container">
     <ul class="pagination">
-        <li><a href="{{ $ordersCust->previousPageUrl() }}">Previous</a></li>
-        @foreach ($ordersCust->getUrlRange(1, $ordersCust->lastPage()) as $page => $url)
-            <li class="{{ $page == $ordersCust->currentPage() ? 'active' : '' }}">
+        <li><a href="{{ $trackcustomer->previousPageUrl() }}">Previous</a></li>
+        @foreach ($trackcustomer->getUrlRange(1, $trackcustomer->lastPage()) as $page => $url)
+            <li class="{{ $page == $trackcustomer->currentPage() ? 'active' : '' }}">
                 <a href="{{ $url }}">{{ $page }}</a>
             </li>
         @endforeach
-        <li><a href="{{ $ordersCust->nextPageUrl() }}">Next</a></li>
+        <li><a href="{{ $trackcustomer->nextPageUrl() }}">Next</a></li>
     </ul>
 </div>
 

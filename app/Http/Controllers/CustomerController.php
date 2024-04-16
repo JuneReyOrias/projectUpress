@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 use App\Models\OrderListing;
 use App\Models\Product;
+
 use App\Models\Cart;
 use App\Models\ServiceCategory;
+use App\Models\TrackOrders;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,9 +21,9 @@ class CustomerController extends Controller
 {
     public function  CustomersDashboard(){
 
-        $pending = OrderListing::where('order_status', 'Confirmed')->count();
+        $pending = TrackOrders::where('order_status', 'Confirmed')->count();
         $cart= Cart::count();
-        $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
+        $pendingOrders = TrackOrders::where('order_status', 'Pending')->count();
 
         $product= Product::all();
         $services = ServiceCategory::all();
@@ -47,10 +49,10 @@ class CustomerController extends Controller
 
     public function Customerprof(){
         $id =Auth::user()->id;
-        $pending = OrderListing::where('order_status', 'Confirmed')->count();
+        $pending = TrackOrders::where('order_status', 'Confirmed')->count();
         $custProfile = User:: find($id);
         $cart= Cart::count();
-        $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
+        $pendingOrders = TrackOrders::where('order_status', 'Pending')->count();
         return view('customer.profile.new_update',compact('custProfile','pending','cart','pendingOrders'));
     }
 
@@ -109,8 +111,8 @@ class CustomerController extends Controller
 public function displayProduct(){
     $product= Product::orderBy('id','desc')->paginate(10);
     $no_cart= Cart::count();
-    $pending = OrderListing::where('order_status', 'Confirmed')->count();
-    $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
+    $pending = TrackOrders::where('order_status', 'Confirmed')->count();
+    $pendingOrders = TrackOrders::where('order_status', 'Pending')->count();
     return view('customer.custproduct.prod_view', compact('product','no_cart','pendingOrders','pending'));
 }
 
@@ -118,8 +120,8 @@ public function displayProduct(){
 public function ViewOfferServices(){
     $services = ServiceCategory::orderBy('id')->paginate(10);
     $no_cart= Cart::count();
-    $pending = OrderListing::where('order_status', 'Confirmed')->count();
-    $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
+    $pending = TrackOrders::where('order_status', 'Confirmed')->count();
+    $pendingOrders = TrackOrders::where('order_status', 'Pending')->count();
     return view('customer.custservices.service_view', compact('services','no_cart','pendingOrders','pending'));
 }
 
@@ -128,8 +130,8 @@ public function AddToCart(){
     $cart=Cart::orderBy('id','desc')->paginate();
     $no_cart=Cart::count();
     $total=Cart::sum('total_amount');
-    $pending = OrderListing::where('order_status', 'Confirmed')->count();
-    $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
+    $pending = TrackOrders::where('order_status', 'Confirmed')->count();
+    $pendingOrders =TrackOrders::where('order_status', 'Pending')->count();
     return view('customer.addcart.cart_order',compact('cart','no_cart','total','pendingOrders','pending'));
 }
 
@@ -256,8 +258,8 @@ public function getProductDetails($id)
 public function cartforedit($id){
     $cart= Cart::find($id);
     $carters= Cart::count();
-    $pending = OrderListing::where('order_status', 'Confirmed')->count();
-    $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
+    $pending = TrackOrders::where('order_status', 'Confirmed')->count();
+    $pendingOrders =TrackOrders::where('order_status', 'Pending')->count();
     return view('customer.addcart.edit_cart',compact('cart','carters','pendingOrders','pending'));
 }
 
@@ -295,7 +297,7 @@ public function UpdateCarts(Request $request,$id){
             $cart->color= $request->color;
             $cart->sizeof= $request->sizeof;
             $cart->unit= $request->unit;
-            $cart->quantity= $request->quantity;
+            $cart->quantity= $request->quantity;    
             $cart->unit_price= $request->unit_price;
             $cart->total_amount= $request->total_amount;
             $cart->product_id= $request->product_id;
@@ -321,64 +323,95 @@ public function UpdateCarts(Request $request,$id){
  
 
 // customeorderlisting of add to cart of orders
-public function  OrderList(){
-   
+public function orderList(Request $request) {
     try {
-        // Check if the user is authenticated
         if (Auth::check()) {
-            // Fetch the authenticated user
             $user = Auth::user();
-        //   $prefix = "1518040000"; 
-        //     $id=IdGenerator::generate(['table'=> 'order_listing','field'=> 'id','length'=>6,'prefix'=>$prefix]);
-        $usersid=$user->id;
-       $data= Cart::where('users_id','=',$usersid)->get();
-       foreach ($data as $cartItem) {
-        // Assuming you have an Order model and the necessary fields in your database table
-        $order = new OrderListing;
-        // $order->id=$id;
-        $order->users_id = $usersid;
-        $order->cust_code = $cartItem->cust_code;
-        $order->image=$cartItem->image;
-        $order->item_name = $cartItem->item_name;
-        $order->type = $cartItem->type;
-        $order->product_id= $cartItem->product_id;
-        $order->services=$cartItem->services;
-        $order->service_category_id=$cartItem->service_category_id;
-        $order->type_services=$cartItem->type_services;
-        $order->sizeof=$cartItem->sizeof;
-        $order->unit=$cartItem->unit;
-        $order->quantity=$cartItem->quantity;
-        $order->unit_price=$cartItem->unit_price;
-        $order->total_amount=$cartItem->total_amount;
-        
 
-        $order->color = $cartItem->color;
-        // Generate a UUID and make it short
-        // $shortUuid = substr((string) Str::uuid(), 0, 8); // Adjust the length as needed
-        // $order->uuid = $shortUuid;
-        // dd($order);
+            // Check if the item already exists in the cart
+            $existingItem = Cart::where('users_id', $user->id)
+                ->where('item_name', $request->item_name)
+                ->where('color', $request->color)
+                ->where('sizeof', $request->sizeof)
+                ->first();
 
-        // Save the order
-        $order->save();
+            if ($existingItem) {
+                // If item already exists, update its quantity and total amount
+                $existingItem->quantity += $request->quantity;
+                $existingItem->total_amount = $existingItem->unit_price * $existingItem->quantity;
+                $existingItem->save();
+            } else {
+                // Generate random trackno and invoiceno
+                $trackno = "Refno-" . mt_rand(100000, 999999);
+                $invoiceno = "IVNo-" . mt_rand(100000, 999999);
 
-        // You might want to delete the cart item after creating the order
-        $cart_id=$cartItem->id;
-        $cartItem= Cart::find($cart_id);
-        $cartItem->delete();
-    }
-}
+                // Retrieve cart items for the user
+                $cartItems = Cart::where('users_id', $user->id)->get();
 
+                foreach ($cartItems as $cartItem) {
+                    // Create a new order
+                    $order = new OrderListing;
+                    $order->trackno = $trackno;
+                    $order->invoiceno = $invoiceno;
+                    $order->users_id = $user->id;
+                    $order->cust_code = $cartItem->cust_code;
+                    $order->image=$cartItem->image;
+                    $order->item_name = $cartItem->item_name;
+                    $order->type = $cartItem->type;
+                    $order->product_id= $cartItem->product_id;
+                    $order->services=$cartItem->services;
+                    
+                    $order->service_category_id=$cartItem->service_category_id;
+                    $order->type_services=$cartItem->type_services;
+                    $order->sizeof=$cartItem->sizeof;
+                    $order->unit=$cartItem->unit;
+                    $order->quantity=$cartItem->quantity;
+                    $order->unit_price=$cartItem->unit_price;
+                    $order->total_amount=$cartItem->total_amount;
+                    
+            
+                    $order->color = $cartItem->color;
+                    // Generate a UUID and make it short
+                    // $shortUuid = substr((string) Str::uuid(), 0, 8); // Adjust the length as needed
+                    // $order->uuid = $shortUuid;
+                    // dd($order);
+
+                    // Save the order
+                    $order->save();
+
+                    // Create track orders
+                    $trackOrder = new TrackOrders;
+                    $trackOrder->order_listing_id = $order->id;
+                    $trackOrder->users_id = $order->users_id;
+                    $trackOrder->product_id= $order->product_id;
+                    $trackOrder->service_category_id = $order->service_category_id;
+                    $trackOrder->customer_name = $order->customer_name;
+                    $trackOrder->department = $order->department;
+                    $trackOrder->college = $order->college;
+                    $trackOrder->trackno = $order->trackno;
+                    $trackOrder->invoiceno = $order->invoiceno;
+                    // dd( $trackOrder);
+                    $trackOrder->save();
+
+                    // Delete the cart item
+                    $cartItem->delete();
+                }
+            }
+
+            // Redirect with success message
             return redirect('/customer-orderslip')->with('message', 'Order Added Successfully');
-
-      
+        } else {
+            // User is not authenticated
+            // Handle this case accordingly
+        }
     } catch (\Exception $e) {
-        // Handle the exception
-        // Log the error or return an error response
+        // Handle specific exceptions and return appropriate response
         dd($e);
         return response()->json(['error' => 'An error occurred while processing the request.'], 500);
     }
-
 }
+
+
 // customer receipt
 public function Receipt(){
     // Assuming you have an authenticated user
@@ -390,12 +423,12 @@ public function Receipt(){
                       ->get();
                       $total= OrderListing::sum('total_amount');
                       $pending = OrderListing::where('order_status', 'Confirmed')->count();
-                      $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
+                      $pendingOrders = TrackOrders::where('order_status', 'Pending')->count();
                       $date = OrderListing::select('id', 'created_at')
                       ->where('users_id', $user->id)
                       ->where('order_status', 'Pending')
                       ->get();
-                      $customerId =$user->cust_code.'-'.$user->id; // Customer/User ID
+                      $customername =$user->firstname.' '.$user->lastname; // Customer/User ID
                       $orderId = $newOrders->pluck('id');
                       $collegeType = $user->college; // Type of College
                       $department = $user->department; // Department
@@ -409,7 +442,7 @@ public function Receipt(){
 
                       $orderlist=OrderListing::orderBy('id','desc')->paginate();
                       $total=OrderListing::sum('total_amount');
-    return view('customer.orderlist.receipt_order',compact('orderlist','total','groupedOrderIds','date','newOrders','total','pending','pendingOrders','customerId','orderId','collegeType','department',));
+    return view('customer.orderlist.receipt_order',compact('orderlist','total','groupedOrderIds','date','newOrders','total','pending','pendingOrders','customername','orderId','collegeType','department',));
 
 
 }
@@ -472,58 +505,69 @@ public function confirmOrders(){
 //    return view('customer.orderlist.view_orders', compact('groupedItems', 'total', 'date', 'customerId', 'orderId', 'collegeType', 'department','groupedOrderIds'));
 // }
 
+// public function newlist(Request $request)
+// {
+//     // Get the authenticated user
+//     $user = Auth::user();
+
+  
+//     // Fetch additional order details
+//     $customername =$user->firstname.' '.$user->lastname; // Customer/User ID
+//    $collegeType = $user->college; // Type of College
+//     $department = $user->department; // Department
+
+  
+
+//     $cart= Cart::count();
+//     $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
+//     $pending = OrderListing::where('order_status', 'Confirmed')->count();
+//     $orderlist=OrderListing::all();
+//     $totalPendingAmount = OrderListing::where('order_status', 'Confirmed')->sum('total_amount');
+//     $trackOrders = TrackOrders::with('user', 'orderListing')->get();
+
+//     // Pass data to the view
+//     return view('customer.orderlist.view_orders', compact('trackOrders','totalPendingAmount','orderlist','cart','pendingOrders', 'customername', 'collegeType', 'department','pending'));
+// }
+
+
 public function newlist(Request $request)
 {
     // Get the authenticated user
     $user = Auth::user();
 
-    // Retrieve the status from the request
-    $status = $request->input('status', 'all'); // Default value is 'all'
-
-    // Fetch orders for the authenticated user based on status
-    if ($status != 'all') {
-        $newOrders = OrderListing::where('users_id', $user->id)
-                                 ->where('order_status', $status)
-                                 ->get();
-    } else {
-        $newOrders = OrderListing::where('users_id', $user->id)->get(); // Fetch all orders
-    }
-
-    // Group the items by their name
-    $groupedItems = $newOrders->groupBy('item_name');
-
-    // Calculate total amount of all orders
-    $total = $newOrders->sum('total_amount');
-
-    // Fetch creation dates of orders
-    $date = OrderListing::select('id', 'created_at')
-                        ->where('users_id', $user->id)
-                        ->where('order_status', 'Pending')
-                        ->get();
-
+  
     // Fetch additional order details
-    $customerId =$user->cust_code.'-'.$user->id; // Customer/User ID
-    $orderId = $newOrders->pluck('id');
-    $collegeType = $user->college; // Type of College
+    $customername =$user->firstname.' '.$user->lastname; // Customer/User ID
+   $collegeType = $user->college; // Type of College
     $department = $user->department; // Department
+$trackcustomer= TrackOrders::with('usersName','orderlist')->orderBy('id','desc')->paginate(10);
+  
 
-    // Group the first 11 digits of each order ID and append the last two digits
-    $groupedOrderIds = [];
-    foreach ($newOrders as $order) {
-        $orderId = $order->id;
-        $groupedPart = substr($orderId, 0, 9); // Get the first 11 digits
-        $lastTwoDigits = substr($orderId, -2); // Get the last two digits
-        $groupedOrderIds[$groupedPart][] = $lastTwoDigits;
-    }
     $cart= Cart::count();
-    $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
+    $pendingOrders =  TrackOrders::where('order_status', 'Pending')->count();
     $pending = OrderListing::where('order_status', 'Confirmed')->count();
-    $orderlist=OrderListing::orderBy('id','desc')->paginate();
-    $total=OrderListing::sum('total_amount');
-   
+    $orderlist=OrderListing::all();
+    $totalPendingAmount = OrderListing::where('order_status', 'Confirmed')->sum('total_amount');
+    $trackOrders = TrackOrders::with('user', 'orderListing')->get();
+
     // Pass data to the view
-    return view('customer.orderlist.view_orders', compact('total','orderlist','cart','pendingOrders','groupedItems', 'total', 'date', 'customerId', 'orderId', 'collegeType', 'department', 'groupedOrderIds', 'status','pending'));
+    return view('customer.orderlist.view_orders', compact('trackOrders','totalPendingAmount','orderlist','cart','pendingOrders', 'customername', 'collegeType', 'department','pending','trackcustomer'));
 }
+
+        // customers all orders view
+        public function CheckAllorders($trackNo){
+            // Find orders with the specified track number or throw a 404 error if not found
+            $checkorders = TrackOrders::where('trackno', $trackNo)->get();
+            
+    $cart= Cart::count();
+    $pendingOrders = TrackOrders::where('order_status', 'Pending')->count();
+    $pending = OrderListing::where('order_status', 'Confirmed')->count();
+    $orderlist=OrderListing::all();
+    $totalPendingAmount = OrderListing::where('order_status', 'Confirmed')->sum('total_amount');
+   
+       return view('customer.orderlist.all_orders_view',compact('checkorders','cart','pendingOrders','pending','orderlist','totalPendingAmount'));
+       }
+
 
 
 // track order page by customers
@@ -531,53 +575,55 @@ public function newlist(Request $request)
 public function trackOrder(Request $request){
     $user = Auth::user();
     $status = $request->input('status', 'all'); // Default value is 'all'
+    // $newOrder = OrderListing::where('users_id', $user->id)->get();
+    //       // Fetch orders for the authenticated user based on status
+    // if ($status != 'all') {
+    //     $newOrders = OrderListing::where('users_id', $user->id)
+    //                              ->where('order_status', $status)
+    //                              ->get();
+    // } else {
+    //     $newOrders = OrderListing::where('users_id', $user->id)->get(); // Fetch all orders
+    // }
 
-          // Fetch orders for the authenticated user based on status
-    if ($status != 'all') {
-        $newOrders = OrderListing::where('users_id', $user->id)
-                                 ->where('order_status', $status)
-                                 ->get();
-    } else {
-        $newOrders = OrderListing::where('users_id', $user->id)->get(); // Fetch all orders
-    }
-
-    $date = OrderListing::select('id', 'created_at')
-    ->where('users_id', $user->id)
-    ->where('order_status', 'Pending')
-    ->get();
+    // $date = OrderListing::select('id', 'created_at')
+    // ->where('users_id', $user->id)
+    // ->where('order_status', 'Pending')
+    // ->get();
 
 
     $usersid=$user->id;
     $cart=Cart::where('users_id','=',$usersid)->get();
     $total= Cart::sum('total_amount');
     $carter= Cart::count();
-    $pending = OrderListing::where('order_status', 'Confirmed')->count();
-    $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
-    $customerId =$user->cust_code.'-'.$user->id; // Customer/User ID
-    $orderId = $newOrders->pluck('id');
+    $pending = TrackOrders::where('order_status', 'Confirmed')->count();
+    $pendingOrders = OrderListing::where('order_status', 'Pending')->groupBy('trackno')->count();
+    $customername =$user->firstname.' '.$user->lastname; // Customer/User ID
+    // $orderId = $newOrders->pluck('id');
     $collegeType = $user->college; // Type of College
     $department = $user->department; // Department
     $groupedOrderIds = [];
-    foreach ($newOrders as $order) {
-        $orderId = $order->id;
-        $groupedPart = substr($orderId, 0, 9); // Get the first 11 digits
-        $lastTwoDigits = substr($orderId, -2); // Get the last two digits
-        $groupedOrderIds[$groupedPart][] = $lastTwoDigits;
-    }
+    // foreach ($newOrders as $order) {
+       
+    //     if ($order->status == 'your_desired_status') {$orderId = $order->id;
+    //     $groupedPart = substr($orderId, 0, 9); // Get the first 11 digits
+    //     $lastTwoDigits = substr($orderId, -2); // Get the last two digits
+    //     $groupedOrderIds[$groupedPart][] = $lastTwoDigits;
+    // }
+    $allOrder = OrderListing::where('users_id', $user->id)->get();
+    $confirmOrders = TrackOrders::where('order_status', 'Confirmed')->groupBy('trackno')->count();
+    $cancelledOrders = TrackOrders::where('order_status', 'Cancelled')->groupBy('trackno')->count();
+    $orderslipOrders = TrackOrders::where('order_status', 'OrderSlip')->groupBy('trackno')->count();
+    $paymentOrders = TrackOrders::where('order_status', 'Payment')->groupBy('trackno')->count();
+    $processingOrders = TrackOrders::where('order_status', 'Processing')->groupBy('trackno')->count();
+    $readyForPickupOrders = TrackOrders::where('order_status', 'Ready for Pick up')->groupBy('trackno')->count();
+    $completedOrders = TrackOrders::where('order_status', 'Completed')->groupBy('trackno')->count();
+    
 
-    $confirmOrders = OrderListing::where('order_status', 'Confirmed')->count();
-    $cancelledOrders = OrderListing::where('order_status', 'Cancelled')->count();
-    $orderslipOrders = OrderListing::where('order_status', 'OrderSlip')->count();
-    $paymentOrders = OrderListing::where('order_status', 'Payment')->count();
-    $processingOrders = OrderListing::where('order_status', 'Processing')->count();
-    $readyForPickupOrders = OrderListing::where('order_status', 'Ready for Pick up')->count();
-    $completedOrders = OrderListing::where('order_status', 'Completed')->count();
-
- 
+    $trackcustomer= TrackOrders::with('usersName','orderlist');
 
 
-    return view('customer.trackorders.view_track',compact('cart','total','carter','pendingOrders','pending','date', 'customerId', 'orderId', 'collegeType', 'department', 'groupedOrderIds', 'status',
-'confirmOrders','orderslipOrders','paymentOrders','processingOrders','readyForPickupOrders','cancelledOrders','completedOrders'));
+    return view('customer.trackorders.view_track',compact('trackcustomer','cart','total','carter','pendingOrders','pending', 'customername', 'collegeType', 'department', 'groupedOrderIds', 'status',
+'confirmOrders','orderslipOrders','paymentOrders','processingOrders','readyForPickupOrders','cancelledOrders','completedOrders','allOrder'));
 }
 
 // services adding cart to cart by customers
@@ -602,11 +648,12 @@ public function Servicescart(Request $request){
               // If item already exists, update its quantity and total amount
               $existingItem->quantity += $request->quantity;
               $existingItem->total_amount = $existingItem->unit_price * $existingItem->quantity;
+            //   dd($existingItem);
               $existingItem->save();
           } else {
               // Create a new cart instance
-              $cart = new Cart();
-            $cart = new Cart();
+             
+            $cart = new Cart;
             
             // Assign user's information to the cart instance
             $cart->users_id = $user->id;
@@ -645,6 +692,7 @@ public function Servicescart(Request $request){
             // dd($cart);
             // Save the cart instance
             $cart->save();
+           
             }
             return redirect('/customer-upress-services')->with('message', 'Cart Added Successfully');
 
@@ -666,7 +714,7 @@ public function cartEditServices($id){
     $cart= Cart::find($id);
     $carters= Cart::count();
     $pending = OrderListing::where('order_status', 'Confirmed')->count();
-    $pendingOrders = OrderListing::where('order_status', 'Pending')->count();
+    $pendingOrders = TrackOrders::where('order_status', 'Pending')->count();
     return view('customer.addcart.edit_cart_services',compact('cart','carters','pendingOrders','pending'));
 }
 // UPDATE THE SERVICES ORDER BY CUSATOMERS
@@ -728,7 +776,7 @@ public function cartUpdateServices(Request $request,$id){
             $cart->unit_price = $request->unit_price;
             $cart->total_amount = $request->total_amount;
             $cart->service_category_id = $request->service_category_id;
-           
+           dd($cart);
            
             // Save the cart instance
             $cart->save();

@@ -14,11 +14,13 @@
     <!-- Bootstrap core CSS -->
     <link href="../../landingpage/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-<!--
+
+
+<!-- Preload essential CSS -->
+<link rel="stylesheet" href="essential.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 
 
 
--->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-nfF0pACuL6Df1PEHsuvQa3dxj1qSfWdI6YlY8+NO1L7SdLEqdXt1sGgE4IkuPwKc" crossorigin="anonymous">
 
     <!-- Additional CSS Files -->
@@ -29,19 +31,11 @@
   </head>
 
   <body>
-    <div class="main-wrapper">
+   
     
-    {{-- <!-- ***** Preloader Start ***** -->
-    <div id="preloader">
-      <div class="jumper">
-          <div></div>
-          <div></div>
-          <div></div>
-      </div>
-  </div>
-  <!-- ***** Preloader End ***** -->
+  
 
-     --}}
+  
     <footer>
         @include('customer.body.footers')
       </footer>
@@ -58,17 +52,7 @@
         <script src="../landingpage/assets/js/isotope.js"></script>
         <script src="../landingpage/assets/js/accordions.js"></script>
     
-    
-        <script language = "text/Javascript"> 
-          cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field
-          function clearField(t){                   //declaring the array outside of the
-          if(! cleared[t.id]){                      // function makes it static and global
-              cleared[t.id] = 1;  // you could use true and false, but that's more typing
-              t.value='';         // with more chance of typos
-              t.style.color='#fff';
-              }
-          }
-        </script>
+ 
      <script>
         document.addEventListener('DOMContentLoaded', function () {
             const profileDropdown = document.getElementById('profileDropdown');
@@ -87,6 +71,18 @@
     </script>
     
       </body>
+      <script>
+        const nonEssentialCSS = document.createElement('link');
+        nonEssentialCSS.rel = 'stylesheet';
+        nonEssentialCSS.href = 'non-essential.css';
+        document.head.appendChild(nonEssentialCSS);
+    </script>
     
+    <!-- Asynchronously load non-essential JavaScript -->
+    <script>
+        const nonEssentialJS = document.createElement('script');
+        nonEssentialJS.src = 'non-essential.js';
+        document.body.appendChild(nonEssentialJS);
+    </script>
     </html>
     

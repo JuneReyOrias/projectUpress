@@ -64,4 +64,20 @@ public function staff(){
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function trackOrders()
+{
+    return $this->hasMany(TrackOrders::class, 'users_id');
+}
+public function productStockouts()
+{
+    return $this->hasMany(ProductStockOuts::class, 'users_id');
+}
+public function orderlisting()
+{
+    return $this->hasMany(OrderListing::class, 'users_id');
+}
+public function trackcustomer()
+{
+    return $this->hasMany(TrackOrders::class, 'users_id');
+}
 }

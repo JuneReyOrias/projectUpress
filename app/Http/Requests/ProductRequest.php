@@ -37,23 +37,14 @@ class ProductRequest extends FormRequest
                 'regex:/^\d+(\.\d+)?$/',
             ],
             
-            'stocks'=>[
-                'required',
-                'string',
-                'max:50',
-            ],
+     
             
             'status'=>[
                 'required',
                 'string',
                 'max:50',
             ],
-            'prod_code'=>[
-                'required',
-                'string',
-                'max:50',
-            ],
-           
+      
             
            
         ];
@@ -64,11 +55,10 @@ class ProductRequest extends FormRequest
             'product_name.required'=>'Please input product name',
             'descritpion.required'=>'Please input description',
             'unit_price.numeric'=>'Please input your unit price, field must be a number',
-            'stocks'=>'Please input product stocks',
+         
            
             'status.required'=>'Please select product status',
-            'prod_code.required'=>'Please input product code',
-            
+           
        ];
     
     }

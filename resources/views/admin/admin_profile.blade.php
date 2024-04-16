@@ -38,25 +38,25 @@
             <p class="my-3">{{$admin->email}}</p>
             <p class="my-3">{{$admin->agri_district}}</p>
            
-            <div class="d-flex justify-content-center mb-2">
+            {{-- <div class="d-flex justify-content-center mb-2">
               <button type="button" class="btn btn-primary">Follow</button>
               <button type="button" class="btn btn-outline-primary ms-1">Message</button>
-            </div>
+            </div> --}}
           </div>
         </div>
         <div class="card mb-4 mb-lg-0">
           <div class="card-body">
-            <p class="mb-4"><span class="text-primary font-italic me-1">assigment</span> Project Status
-            </p>
-            <p class="mb-1" style="font-size: .77rem;">Web Design</p>
+            {{-- <p class="mb-4"><span class="text-primary font-italic me-1">assigment</span> Project Status
+            </p> --}}
+            {{-- <p class="mb-1" style="font-size: .77rem;">Web Design</p> --}}
             <div class="progress rounded" style="height: 5px;">
-              <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80"
-                aria-valuemin="0" aria-valuemax="100"></div>
+              {{-- <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80"
+                aria-valuemin="0" aria-valuemax="100"></div> --}}
             </div>
-            <p class="mt-4 mb-1" style="font-size: .77rem;">Website Markup</p>
+            {{-- <p class="mt-4 mb-1" style="font-size: .77rem;">Website Markup</p> --}}
             <div class="progress rounded" style="height: 5px;">
-              <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72"
-                aria-valuemin="0" aria-valuemax="100"></div>
+              {{-- <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72"
+                aria-valuemin="0" aria-valuemax="100"></div> --}}
             </div>
             {{-- <p class="mt-4 mb-1" style="font-size: .77rem;">One Page</p>
             <div class="progress rounded" style="height: 5px;">
@@ -85,10 +85,19 @@
 
             <div class="row">
               <div class="col-sm-3">
-                <label class="mb-0" name="name">FullName</label>
+                <label class="mb-0" name="name">FirstName</label>
               </div>
               <div class="col-sm-9">
-                <input type="text" class="form-control col-sm-9" name="name"  id="exampleInputUsername1" autocomplete="off"value="{{$admin->name}}">
+                <input type="text" class="form-control col-sm-9" name="firstname"  id="exampleInputUsername1" autocomplete="off"value="{{$admin->firstname}}">
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <label class="mb-0" name="name">LastName</label>
+              </div>
+              <div class="col-sm-9">
+                <input type="text" class="form-control col-sm-9" name="lastname"  id="exampleInputUsername1" autocomplete="off"value="{{$admin->lastname}}">
               </div>
             </div>
             <hr>
@@ -103,10 +112,19 @@
             <hr>
             <div class="row">
               <div class="col-sm-3">
-                <p class="mb-0">Agri-District</p>
+                <p class="mb-0">College</p>
               </div>
               <div class="col-sm-9">
-                <input type="text" class="form-control"name="agri_district" id="agri_district" autocomplete="off" value="{{$admin->agri_district}}">
+                <input type="text" class="form-control"name="college" id="agri_district" autocomplete="off" value="{{$admin->college}}">
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Department</p>
+              </div>
+              <div class="col-sm-9">
+                <input type="text" class="form-control"name="college" id="agri_district" autocomplete="off" value="{{$admin->department}}">
               </div>
             </div>
             <hr>

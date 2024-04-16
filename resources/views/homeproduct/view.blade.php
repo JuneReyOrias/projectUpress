@@ -13,14 +13,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="landingpage/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <!--
-
-TemplateMo 546 Sixteen Clothing
-
-https://templatemo.com/tm-546-sixteen-clothing
-
--->
-
+ 
     <!-- Additional CSS Files -->
     <link rel="stylesheet" href="landingpage/assets/css/fontawesome.css">
     <link rel="stylesheet" href="landingpage/assets/css/templatemo-sixteen.css">
@@ -30,15 +23,7 @@ https://templatemo.com/tm-546-sixteen-clothing
 
 <body>
 
-    <!-- ***** Preloader Start ***** -->
-    <div id="preloader">
-        <div class="jumper">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </div>
-    <!-- ***** Preloader End ***** -->
+   
 
     <!-- Header -->
     <header class="">

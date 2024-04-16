@@ -171,7 +171,7 @@
                     </article>
                     <article class="card">
                         <div class="card-body row">
-                            <div class="col"> <strong>CustomerID:</strong> <br> {{ $customerId }} </div>
+                            <div class="col"> <strong>CustomerName:</strong> <br> {{ $customername}} </div>
                             <div class="col"> <strong>OrderID:</strong> <br> 
                                 @foreach($groupedOrderIds as $groupedPart => $lastTwoDigits)
                                     {{ $groupedPart . '-' . implode(', ', $lastTwoDigits) }} <br>
@@ -210,7 +210,7 @@
                                     </div>
                                 </td>
                                 <td data-th="Price">{{ $carts->item_name}}</td>
-                                <td data-th="Price">{{ $carts->type}}</td>
+                               
                                 <td data-th="Price">{{ $carts->color}}</td>
                                 <td data-th="Quantity">{{ $carts->quantity}}
                                     {{-- <input type="number" class="form-control form-control-lg text-center" value="{{ $carts->quantity}}"> --}}
