@@ -176,7 +176,7 @@
        $('#departmentDropdown').show();
    });
 
-   // Show additional college field if "Add New" is selected
+
    $('#SizeName').change(function() {
        var selectedCollege = $(this).val();
        if (selectedCollege === 'add_new') {
@@ -193,18 +193,18 @@
 
 
 <script>
-    // JavaScript to handle stockout quantity changes and update available quantity
+
     document.addEventListener("DOMContentLoaded", function() {
         const availableQuantityInput = document.getElementById("availableQuantity");
         const stockOutQuantityInput = document.getElementById("stockOutQuantity");
 
-        // Function to handle changes in stockout quantity
+      
         function handleStockOutChange() {
-            // Get current values from the input fields
+        
             let availableQuantity = parseInt(availableQuantityInput.value);
             let stockOutQuantity = parseInt(stockOutQuantityInput.value);
 
-            // Calculate the new available quantity
+         
             let newAvailableQuantity = availableQuantity - stockOutQuantity;
 
             // If the stockout quantity exceeds available quantity, handle it

@@ -3,6 +3,8 @@
 @section('admin')
 @extends('layouts._footer-script')
 @extends('layouts._head')
+
+
 <div class="page-content">
     <div class="row">
         <div class="col-md-12 grid-margin">

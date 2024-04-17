@@ -23,8 +23,6 @@
 
 <body>
 
-   
-
     <!-- Header -->
     <header class="">
         <nav class="navbar navbar-expand-lg">

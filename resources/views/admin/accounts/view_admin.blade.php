@@ -1,4 +1,4 @@
-@extends('admin.dashb')
+<!-- @extends('admin.dashb')
 
 @section('admin')
 
@@ -170,4 +170,4 @@
   $(this).addClass("active").siblings().removeClass("active");
 });
 </script>
-@endsection
+@endsection -->

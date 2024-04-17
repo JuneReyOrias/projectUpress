@@ -15,6 +15,8 @@ use App\Http\Controllers\sales\ProductController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\UserController;
 use App\Models\ServiceParameter;
+use App\Http\Controllers\Admin\StockInController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +35,14 @@ Route::get('/dashboard', function () {
 
 // view customers all orders
 Route::get('/customer-view-all-orders/{trackNo}', [CustomerController::class, 'CheckAllorders'])->name('customer.orderlist.all_orders_view');
+
+//product ordering
+Route::get('/product-ordering', function () {
+    return view('admin.customerOrders.ordering');
+})->name('product.ordering');
+Route::get('/orders/review', function () {
+    return view('admin.customerOrders.review'); // Update the view path
+})->name('order.review');
 
 // viewl all order
 Route::get('/admin-view-allCustomers-orders/{trackNo}',[AdminController::class,'AllCustomersOrd'])->name('admin.customerOrders.view_allorders');
@@ -54,6 +64,7 @@ Route::get('/admin-add-stock-out',[AdminController::class,'AddStockOut'])->name(
 
 // admin add new stock in
 Route::get('/admin-add-stock-in',[AdminController::class,'AddStockIn'])->name('admin.stock-in.add_stock_in_out');
+Route::get('/stock-records', [StockInController::class, 'stockRecords'])->name('admin.stock-in.stock_records');
 Route::post('/admin-add-stock-in',[AdminController::class,'Stockin']);
 Route::get('/admin-update-stock-in/{editstock}',[AdminController::class,'EditStockInOut'])->name('admin.stock-in.edit_stockIn_out');
 Route::post('/admin-update-stock-in/{editstock}',[AdminController::class,'StoreStockout']);
@@ -82,6 +93,8 @@ Route::get('/purchase/product',[OrderListingController::class, 'CreateOrder'])->
 Route::get('/purchase/services',[OrderListingController::class, 'CreateServices'])->name('customer.service.add_services');
 //purchase order view
 Route::get('/purchase',[PurchaseOrderController::class, 'addpurchase'])->name('customer.purchase.view_purchase');
+
+
 
 //material insertt of datta by admin
 Route::get('/material',[MaterialController::class,'material'])->name('material.new_materials');
