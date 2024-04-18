@@ -1,4 +1,4 @@
-@extends('admin.dashb')
+<!-- @extends('admin.dashb')
 
 @section('admin')
 
@@ -225,4 +225,4 @@
 });
 
 </script>
-@endsection
+@endsection -->

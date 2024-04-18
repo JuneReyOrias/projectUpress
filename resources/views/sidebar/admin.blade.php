@@ -161,9 +161,10 @@
           </a>
           <div class="collapse" id="transaction">
             <ul class="nav sub-menu">
-              <li class="nav-item">
-                <a href="{{ url('admin.transaction_records') }}" class="nav-link">Transaction Records</a>
-              </li>
+            <li class="nav-item">
+                <a href="{{ route('admin.transaction_records') }}" class="nav-link">Transaction Records</a>
+            </li>
+
               <!-- Additional transaction record links can be added here -->
             </ul>
           </div>
@@ -237,7 +238,7 @@
             <div class="collapse" id="general-pages">
               <ul class="nav sub-menu">
                 <li class="nav-item">
-                  <a href="{{route('admin.accounts.view_users_acc')}}" class="nav-link">Users</a>
+                  <a href="{{route('admin.accounts.view_users_acc')}}" class="nav-link">Account informations</a>
                 </li>
                 <!-- <li class="nav-item">
                   <a href="{{route('admin.accounts.view_admin')}}" class="nav-link"> Admin</a>

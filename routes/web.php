@@ -32,6 +32,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+//tranaction
+Route::get('/admin/transaction_records', function () {
+    return view('admin.transaction-records.transaction');
+})->name('admin.transaction_records');
 
 // view customers all orders
 Route::get('/customer-view-all-orders/{trackNo}', [CustomerController::class, 'CheckAllorders'])->name('customer.orderlist.all_orders_view');
@@ -40,8 +44,9 @@ Route::get('/customer-view-all-orders/{trackNo}', [CustomerController::class, 'C
 Route::get('/product-ordering', function () {
     return view('admin.customerOrders.ordering');
 })->name('product.ordering');
+
 Route::get('/orders/review', function () {
-    return view('admin.customerOrders.review'); // Update the view path
+    return view('admin.customerOrders.review'); 
 })->name('order.review');
 
 // viewl all order

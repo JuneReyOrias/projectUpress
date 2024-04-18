@@ -25,7 +25,7 @@
 
                 <!-- Stock records table -->
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table">
                         <thead class="thead-dark">
                             <tr>
                                 <th>Stock ID</th>
@@ -44,29 +44,10 @@
                                 <td>100</td>
                                 <td>2024-04-18</td>
                                 <td>
-                                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
-                                    <form action="#" method="POST" style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this record?')">Delete</button>
-                                    </form>
+                                    <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewStockModal">View</a>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Product B</td>
-                                <td>Size L</td>
-                                <td>50</td>
-                                <td>2024-04-17</td>
-                                <td>
-                                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
-                                    <form action="#" method="POST" style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this record?')">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
+                            <!-- Add more rows as needed -->
                         </tbody>
                     </table>
                 </div>
@@ -74,6 +55,27 @@
         </div>
     </div>
 </div>
+
+<!-- View Stock Modal -->
+<div class="modal fade" id="viewStockModal" tabindex="-1" aria-labelledby="viewStockModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-white" id="viewStockModalLabel">Stock Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="color: black; background-color: white;">
+                <p><strong>Stock ID:</strong> 1</p>
+                <p><strong>Product Name:</strong> Product A</p>
+                <p><strong>Size Name:</strong> Size M</p>
+                <p><strong>Quantity:</strong> 100</p>
+                <p><strong>Date:</strong> 2024-04-18</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 

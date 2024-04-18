@@ -38,8 +38,8 @@
                                 <a href="#" class="btn btn-success me-md-2" data-bs-toggle="modal" data-bs-target="#addAccountModal">Add</a>
                             </div>
                             <br>
-                            <div class="table-responsive" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); border-radius: 10px;">
-                                <table class="table table-info" style="background-color: #ffffff;">
+                            <div class="table-responsive" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+                                <table class="table bg-light text-black table-bordered ">
                                     <thead class="thead-light">
                                         <tr>
                                             <th>User ID</th>
@@ -51,7 +51,7 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="bg-white">
                                         @foreach ($accounts->where('role', 'customer') as $customer)
                                         <tr>
                                             <td>{{ $customer->cust_code.'-'.$customer->id }}</td>
@@ -93,9 +93,9 @@
                                 <button class="btn btn-success me-md-2" data-bs-toggle="modal" data-bs-target="#addStaffAccountModal">Add Staff</button>
                             </div>
                             <br>
-                            <div class="table-responsive" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); border-radius: 10px;">
-                                <table class="table table-bordered table-striped">
-                                    <thead class="thead-dark">
+                            <div class="table-responsive" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); ">
+                                <table class="table bg-light text-black table-bordered ">
+                                    <thead class="thead-light">
                                         <tr>
                                             <th>User ID</th>
                                             <th>Username</th>
@@ -106,7 +106,7 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="bg-white">
                                         @foreach ($accounts->where('role', 'staff') as $staff)
                                         <tr>
                                             <td>{{ $staff->cust_code.'-'.$staff->id }}</td>
@@ -137,20 +137,20 @@
                             </div>
 
                             <!-- Pagination -->
-                            <div class="d-flex justify-content-center mt-3">
+                            <div class="d-flex justify-content-center mt-2">
                                 <ul class="pagination">
                                     <li class="page-item">
-                                        <a class="page-link" href="{{ $accounts->previousPageUrl() }}" aria-label="Previous">
+                                        <a class="page-link bg-white text-black" href="{{ $accounts->previousPageUrl() }}" aria-label="Previous">
                                             <span aria-hidden="true">&laquo; Previous</span>
                                         </a>
                                     </li>
                                     @foreach ($accounts->getUrlRange(1, $accounts->lastPage()) as $page => $url)
-                                        <li class="page-item {{ $page == $accounts->currentPage() ? 'active' : '' }}">
-                                            <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                        <li class="page-item table-bordered{{ $page == $accounts->currentPage() ? 'active' : '' }}">
+                                            <a class="page-link bg-white text-black" href="{{ $url }}">{{ $page }}</a>
                                         </li>
                                     @endforeach
                                     <li class="page-item">
-                                        <a class="page-link" href="{{ $accounts->nextPageUrl() }}" aria-label="Next">
+                                        <a class="page-link bg-white text-black" href="{{ $accounts->nextPageUrl() }}" aria-label="Next">
                                             <span aria-hidden="true">Next &raquo;</span>
                                         </a>
                                     </li>
@@ -167,9 +167,9 @@
                                 <button class="btn btn-success me-md-2" data-bs-toggle="modal" data-bs-target="#addAdminAccountModal">Add Admin</button>
                             </div>
                             <br>
-                            <div class="table-responsive" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); border-radius: 10px;">
-                                <table class="table table-striped table-bordered">
-                                    <thead class="thead-dark">
+                            <div class="table-responsive" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+                                <table class="table bg-light text-black table-bordered ">
+                                    <thead class="thead-light">
                                         <tr>
                                             <th>User ID</th>
                                             <th>Username</th>
@@ -185,7 +185,7 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="bg-white">
                                         @foreach ($accounts->where('role', 'admin') as $admin)
                                         <tr>
                                             <td>{{ $admin->cust_code.'-'.$admin->id }}</td>
@@ -241,7 +241,7 @@
                 <h5 class="modal-title text-white" id="addAccountModalLabel">Register New Account</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body bg-white text-black">
                 <form action="{{ url('AccountAdd') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row g-3"> 
@@ -333,7 +333,7 @@
                 <h5 class="modal-title text-white" id="addStaffAccountModalLabel">Add Staff Account</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body bg-white text-black">
                 <form action="{{ url('AccountAdd') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row g-3">
@@ -404,7 +404,7 @@
                 <h5 class="modal-title text-white" id="addAdminAccountModalLabel">Add Admin Account</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body bg-white text-black">
                 <form action="{{ url('AccountAdd') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row g-3">
@@ -476,7 +476,7 @@
                 <h5 class="modal-title text-white" id="editCustomerAccountModalLabel">Edit Customer Account</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body bg-white text-black">
                 <form action="#" method="post">
                     @csrf
                     @method('PUT')
@@ -514,7 +514,7 @@
                 <h5 class="modal-title text-white" id="editStaffAccountModalLabel">Edit Staff Account</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body bg-white text-black">
                 <form action="#" method="post">
                     @csrf
                     @method('PUT')
@@ -547,7 +547,7 @@
 <!-- Edit Admin Account Modal -->
 <div class="modal fade" id="editAdminAccountModal" tabindex="-1" aria-labelledby="editAdminAccountModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <div class="modal-content bg-white text-black">
             <div class="modal-header">
                 <h5 class="modal-title text-white" id="editAdminAccountModalLabel">Edit Admin Account</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
