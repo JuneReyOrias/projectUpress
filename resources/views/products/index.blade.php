@@ -122,7 +122,7 @@
                       
                       </div>
                  
-                      <div class="button d-flex justify-content-end"> <!-- Use d-flex and justify-content-end to align the button to the end -->
+                      <div class="button d-flex justify-content-end">
                         <input type="submit" class="register-button" value="Add">
                     </div>
                     

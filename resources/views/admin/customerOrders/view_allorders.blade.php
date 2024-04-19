@@ -48,6 +48,7 @@
                         </div>
                         <div class="track-card">
                             <div class="text-center">
+                                <img class="rounded-circles d-block mx-auto mb-4" style="max-width: 70%; height: auto; max-height: 70px;" src="../landingpage/assets/images/wmsu.png" alt="University Logo">
                                 <span>Western Mindanao State University</span><br>
                                 <h5>UNIVERSITY PRESS</h5>
                                  <span>Zamboanga City</span><br>
