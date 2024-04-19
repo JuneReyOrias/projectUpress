@@ -98,13 +98,13 @@
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#advancedUI" role="button" aria-expanded="false" aria-controls="advancedUI">
               <i class="link-icon" data-feather="layers"></i>
-              <span class="link-title">Services </span>
+              <span class="link-title">Services page </span>
               <i class="link-arrow" data-feather="chevron-down"></i>
             </a>
             <div class="collapse" id="advancedUI">
               <ul class="nav sub-menu">
                 <li class="nav-item">
-                  <a href="{{route('servicescat.add_services')}}" class="nav-link">Add Services Category</a>
+                  <a href="{{route('servicescat.add_services')}}" class="nav-link">Services</a>
                 </li>
                 {{-- <li class="nav-item">
                   <a href="{{route('servicescat.show')}}" class="nav-link">Add Service Param </a>
