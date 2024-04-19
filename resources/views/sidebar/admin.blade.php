@@ -144,12 +144,12 @@
               <li class="nav-item">
                   <a href="{{ route('product.ordering') }}" class="nav-link">Product Ordering</a>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="{{ route('admin.customerOrders.view_orders') }}" class="nav-link">Customer Orders</a>
               </li>
               <li class="nav-item">
                 <a href="{{ route('admin.customerOrders.TrackCustomerOrders') }}" class="nav-link">Track Customer Orders</a>
-              </li>
+              </li> -->
             </ul>
           </div>
         </li>

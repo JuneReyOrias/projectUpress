@@ -55,7 +55,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-dark text-light">
-                    <h5 class="modal-title" id="paymentModalLabel">Payment Details</h5>
+                    <h5 class="modal-title" id="paymentModalLabel">Order Details</h5>
                     <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -100,10 +100,12 @@
                         </div>
                     </div>
                     <hr>
+                    
                     <form id="paymentForm">
                         <div class="form-group">
-                            <label for="paymentAmount">Payment Amount ($)</label>
-                            <input type="number" class="form-control" id="paymentAmount" placeholder="Enter Payment Amount" min="1" required>
+                            <label for="imageUpload">Upload OR</label>
+                            <input type="file" class="form-control-file border" id="imageUpload" accept="image/*" required>
+                            <!-- 'accept="image/*"' ensures only image files can be selected -->
                         </div>
                         <div id="outOfStockMessage" class="alert alert-danger" style="display: none;">
                             The product is currently out of stock.

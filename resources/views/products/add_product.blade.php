@@ -31,7 +31,7 @@
                                         <th>Product ID</th>
                                         <th>Product Name</th>
                                         <th>Description</th>
-                                        <th>Unit Price</th>
+                                        <!-- <th>Unit Price</th> -->
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -45,7 +45,7 @@
                                             <td>{{ $products->id }}</td>
                                             <td>{{ $products->product_name }}</td>
                                             <td>{{ $products->description }}</td>
-                                            <td>{{ $products->unit_price }}</td>
+                                            <!-- <td>{{ $products->unit_price }}</td> -->
                                             <td>{{ $products->status }}</td>
                                             <td>
                                                 <!-- <a href="{{ route('products.update_product', $products->id) }}" class="btn btn-primary btn-sm" title="Edit">
@@ -119,10 +119,10 @@
                         <label for="description" class="form-label text-black">Description</label>
                         <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
                     </div>
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label for="unit_price" class="form-label text-black">Unit Price</label>
                         <input type="number" step="0.01" class="form-control" id="unit_price" name="unit_price" required>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

@@ -8,7 +8,7 @@
         <div class="container">
             <div class="row mt-1">
                 <div class="col-md-12">
-                    <h1>Customer's order</h1>
+                    <h1>Orders</h1>
 
                     <div class="table-responsive mt-4">
                         <table class="table table-bordered">
@@ -51,4 +51,5 @@
             </div>
         </div>
     </div>
+    
 @endsection
