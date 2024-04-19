@@ -168,6 +168,9 @@
         
         <!-- Approved Services Tab -->
         <div class="tab-pane fade" id="approvedServices" role="tabpanel" aria-labelledby="approved-tab">
+            <div class="table-toolbar mb-3">
+                <!-- Button to Add Service Modal -->
+            </div>
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <thead class="thead-dark">
