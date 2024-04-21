@@ -98,21 +98,23 @@
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#advancedUI" role="button" aria-expanded="false" aria-controls="advancedUI">
               <i class="link-icon" data-feather="layers"></i>
-              <span class="link-title">Services </span>
+              <span class="link-title">Services</span>
               <i class="link-arrow" data-feather="chevron-down"></i>
             </a>
             <div class="collapse" id="advancedUI">
               <ul class="nav sub-menu">
                 <li class="nav-item">
-                  <a href="{{route('servicescat.add_services')}}" class="nav-link">Add Services Category</a>
-                </li>
-                {{-- <li class="nav-item">
-                  <a href="{{route('servicescat.show')}}" class="nav-link">Add Service Param </a>
+                  <a href="{{route('servicescat.add_services')}}" class="nav-link">Service Lists</a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{route('material.new_materials')}}" class="nav-link">Add Materials </a>
-                </li> --}}
-               
+                  <a href="#" class="nav-link">Pending Services</a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link">Approved Services</a>
+                </li>
+                <li class="nav-item">
+                  <a href="" class="nav-link">Completed Services</a>
+                </li>
               </ul>
             </div>
           </li>

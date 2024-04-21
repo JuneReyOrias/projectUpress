@@ -1,3 +1,4 @@
+<!-- not kasama -->
 @extends('admin.dashb')
 
 @section('admin')
